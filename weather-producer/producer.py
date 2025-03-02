@@ -37,7 +37,7 @@ def poll_and_send_data(interval=30):
     while True:
         data = fetch_api_data()
         if data:
-            send_to_kafka('test', data)
+            send_to_kafka('weather-data', data)
         time.sleep(interval)
 
 def main():
