@@ -1,36 +1,41 @@
 import requests
 import os
-from dotenv import load_dotenv
 import json
+import concurrent.futures
 
-load_dotenv()
+points = [
+    "49.2827,-123.1207",  # Downtown Vancouver
+    "49.2600,-123.1135",  # East Vancouver
+    "49.2800,-123.1000",  # West End
+    "49.2767,-123.1121",  # Near Stanley Park
+    "49.2690,-123.1122",  # Near Vancouver International Airport (YVR)
+    "49.2895,-123.1150"   # False Creek area    
+]
 
-def fetch_traffic_data():
-    api_key = ""
-    point = "49.2827,-123.1207"
-    url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
 
+api_key = ""
+url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
+
+
+def fetch_traffic_data(point):
     params = {
-        "key": api_key,
-        "point": point,
-        "unit": "KMPH",
-        "openLr": "false"
+        'key': api_key,
+        'point': point,
+        'unit': 'KMPH',
+        'thickness': 10,
+        'openLr': False,
+        'jsonp': False
     }
+    response = requests.get(url, params=params)
+    return response.json()
 
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        data = response.json()
-        
-        with open("traffic_data.json", "w") as file:
-            json.dump(data, file, indent=4)
-        
-        return data
-    
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching traffic data: {e}")
-        return None
+def fetch_bulk_data():
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = executor.map(fetch_traffic_data, points)
+    return list(results)
 
-if __name__ == "__main__":
-    traffic_data = fetch_traffic_data()
-    #print(traffic_data) 
+bulk_data = fetch_bulk_data()
+with open("traffic_data.json", "w") as file:
+    json.dump(bulk_data, file, indent=4)
+
+print(bulk_data)
