@@ -1,0 +1,59 @@
+[
+    {
+        "flowSegmentData": {
+            "frc": "FRC2",
+            "currentSpeed": 24,
+            "freeFlowSpeed": 24,
+            "currentTravelTime": 51,
+            "freeFlowTravelTime": 51,
+            "confidence": 1,
+            "roadClosure": false,
+            "coordinates": {
+                "coordinate": [
+                    {
+                        "latitude": 49.28316999159762,
+                        "longitude": -123.11908952498788
+                    },
+                    {
+                        "latitude": 49.2831002237978,
+                        "longitude": -123.11918608451244
+                    },
+                    {
+                        "latitude": 49.282954071966174,
+                        "longitude": -123.11939261460662
+                    },
+                    {
+                        "latitude": 49.28280387357939,
+                        "longitude": -123.11962596679098
+                    },
+                    {
+                        "latitude": 49.28248198710851,
+                        "longitude": -123.12010339999574
+                    },
+                    {
+                        "latitude": 49.28201531087359,
+                        "longitude": -123.1208047976533
+                    },
+                    {
+                        "latitude": 49.281659901288116,
+                        "longitude": -123.12134660387443
+                    },
+                    {
+                        "latitude": 49.28129109278709,
+                        "longitude": -123.12190852666318
+                    },
+                    {
+                        "latitude": 49.281150294151516,
+                        "longitude": -123.12212444448892
+                    },
+                    {
+                        "latitude": 49.28095579999649,
+                        "longitude": -123.12242082858515
+                    }
+                ]
+            },
+            "@version": "traffic-service-flow 1.0.132"
+        },
+        "date": "Tue, 04 Mar 2025 06:02:06 GMT"
+    }
+]
