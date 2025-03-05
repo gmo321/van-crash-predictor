@@ -5,6 +5,7 @@ assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 from pyspark.sql import SparkSession, functions, types
 from pyspark.sql.types import *
 from pyspark.sql import functions as F
+from pyspark.sql.functions import monotonically_increasing_id
 
 
 def main(spark):
@@ -46,33 +47,41 @@ def main(spark):
     icbc_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(path, schema=df_schema)
+                        .csv(path, schema=df_schema) \
+                        .repartition(120)
+    
+    #icbc_df_parquet = spark.read.schema(df_schema).parquet('parquet/icbc')
+    #icbc_df_parquet.show()
                         
 
     #icbc_df.show(1)
     
     # Checking for duplicate columns
     icbc_df = icbc_df.withColumn('is_duplicate', 
-                                 F.when(F.col('Municipality With Boundary') == F.col('Municipality Name'), F.lit(True))
+                                 F.when(F.col('Street Full Name') == F.col('Street Full Name (ifnull)'), F.lit(True))
                                  .otherwise(F.lit(False)))
     
-    same_rows = icbc_df.filter(F.col('is_duplicate') == True).count()
-    
-    print(f'Same Rows: {same_rows}')
+    diff_rows = icbc_df.filter(F.col('is_duplicate') == False).select('Street Full Name', 'Street Full Name (ifnull)')
     
     
+    # Drop unnecessary columns
     icbc_df = icbc_df.drop('Crash Breakdown 2', 'Municipality With Boundary', 'Animal Flag', 'Cyclist Flag', 'Heavy Vehicle Flag', 'Motorcycle Flag', \
-        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)')
+        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Cross Street Full Name', 'Street Full Name')
     
 
-    icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
+    #icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
     
-    # TODO check nulls, duplicate rows
-    #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
+    # Generate unique ID as key column
+    icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
+    
+    # TODO check nulls
+    icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     
     total_rows = icbc_df.count()
     print(f'Total rows: {total_rows}')
-
+    
+    #icbc_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/icbc")
+    
     
     
                        
