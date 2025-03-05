@@ -73,8 +73,6 @@ def main(spark):
     
     # TODO check nulls, duplicate rows
     icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
-    # TODO check nulls
-    icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     
     #total_rows = icbc_df.count()
     #print(f'Total rows: {total_rows}')
