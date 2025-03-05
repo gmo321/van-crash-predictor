@@ -18,6 +18,13 @@ url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/jso
 
 
 def fetch_traffic_data(point):
+    """
+    Fetch traffic data for a given point.
+    Args:
+        point (str): The geographical point for which to fetch traffic data.
+    Returns:
+        dict: The traffic data in JSON format.
+    """
     params = {
         'key': api_key,
         'point': point,
@@ -26,8 +33,6 @@ def fetch_traffic_data(point):
         'openLr': False,
         'jsonp': False
     }
-    
-    
     
     response = requests.get(url, params=params)
     
@@ -42,7 +47,7 @@ def fetch_traffic_data(point):
 def fetch_bulk_data():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(fetch_traffic_data, points)
-    return list(results)
+    return {"traffic_data": list(results)} 
 
 bulk_data = fetch_bulk_data()
 
