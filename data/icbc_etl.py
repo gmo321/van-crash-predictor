@@ -8,7 +8,7 @@ from pyspark.sql import functions as F
 
 
 def main(spark):
-    path = 'raw/ICBC_BC_full.csv'
+    #path = 'raw/ICBC_BC_full.csv'
 
     df_schema = types.StructType([
     StructField("Crash Breakdown 2", StringType(), True),
@@ -46,7 +46,7 @@ def main(spark):
     icbc_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(path, schema=df_schema)
+                        .csv("s3a://van-crash-data/icbc/raw/ICBC_BC_full.csv", schema=df_schema)
                         
 
     #icbc_df.show(1)
@@ -65,17 +65,16 @@ def main(spark):
         'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)')
     
 
-    icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
+    icbc_df.select('Intersection Crash', 'Street Full Name', 'Month Of Year').show(truncate=False)
     
     # TODO check nulls, duplicate rows
-    #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
+    icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     
-    total_rows = icbc_df.count()
-    print(f'Total rows: {total_rows}')
+    #total_rows = icbc_df.count()
+    #print(f'Total rows: {total_rows}')
 
     
-    
-                       
+               
 
 
 
