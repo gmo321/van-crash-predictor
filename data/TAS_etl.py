@@ -136,9 +136,17 @@ def main(spark):
     no_cf_df.show(1)    
     no_city_df.show(1)
     entity_df.show(1)
+    
+    
+    #no_cf_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/no_cf")
+    #no_city_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/no_city")
+    #entity_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/entity")
                                           
    
+    # Read parquet files
+    #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
     
+    #no_cf_df_parquet.show()
 
 
 if __name__ == '__main__':
