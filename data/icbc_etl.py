@@ -9,7 +9,7 @@ from pyspark.sql.functions import monotonically_increasing_id
 
 
 def main(spark):
-    path = 'raw/ICBC_BC_full.csv'
+    #path = 'raw/ICBC_BC_full.csv'
 
     df_schema = types.StructType([
     StructField("Crash Breakdown 2", StringType(), True),
@@ -47,11 +47,7 @@ def main(spark):
     icbc_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(path, schema=df_schema) \
-                        .repartition(120)
-    
-    #icbc_df_parquet = spark.read.schema(df_schema).parquet('parquet/icbc')
-    #icbc_df_parquet.show()
+                        .csv("s3a://van-crash-data/icbc/raw/ICBC_BC_full.csv", schema=df_schema)
                         
 
     #icbc_df.show(1)
@@ -69,14 +65,20 @@ def main(spark):
         'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Cross Street Full Name', 'Street Full Name')
     
 
+    icbc_df.select('Intersection Crash', 'Street Full Name', 'Month Of Year').show(truncate=False)
     #icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
     
     # Generate unique ID as key column
     icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
     
+    # TODO check nulls, duplicate rows
+    icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     # TODO check nulls
     icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     
+    #total_rows = icbc_df.count()
+    #print(f'Total rows: {total_rows}')
+
     total_rows = icbc_df.count()
     print(f'Total rows: {total_rows}')
     
@@ -84,7 +86,7 @@ def main(spark):
     
     
     
-                       
+               
 
 
 
