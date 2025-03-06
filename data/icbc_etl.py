@@ -3,12 +3,15 @@ assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
 import pandas as pd
 from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
 import time
+import os
+import json
 
 from pyspark.sql import SparkSession, functions, types
 from pyspark.sql.types import *
 from pyspark.sql import functions as F
-from pyspark.sql.functions import monotonically_increasing_id
+from pyspark.sql.functions import monotonically_increasing_id, concat_ws, col, lit, udf
 
 
 def main(spark):
@@ -68,14 +71,14 @@ def main(spark):
         'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Cross Street Full Name', 'Street Full Name')
     
 
-    icbc_df.select('Street Full Name (ifnull)', "Municipality Name", "Region").show(truncate=False)
+    #icbc_df.select('Street Full Name (ifnull)', "Municipality Name", "Region").show(truncate=False)
     #icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
     
     # Generate unique ID as key column
     icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
     
     # TODO check nulls, duplicate rows
-    icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
+    #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     
     #total_rows = icbc_df.count()
     #print(f'Total rows: {total_rows}')
@@ -86,11 +89,67 @@ def main(spark):
     #icbc_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/icbc")
     
     
-    geolocator = Nominatim(user_agent="myGeocoder")
-    
+    #geolocator = Nominatim(user_agent="myGeocoder")
+    #geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
     #location = geolocator.geocode("175 5th Avenue NYC")  
-    #print((location.latitude, location.longitude))        
+    #print((location.latitude, location.longitude))
+    
+     
+    def geocode_function(city):
+        
+        geolocator = Nominatim(user_agent="myGeocoder")
+        geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
+        
+        location = geocode(city)
+        if location:
+            return (location.latitude, location.longitude)
+        else:
+            return (None, None)
+        
+        
+        
+        
+    geocode_udf = udf(geocode_function, StructType([
+        StructField("latitude", DoubleType(), True),
+        StructField("longitude", DoubleType(), True)
+    ]))
+                
 
+    # TODO keep as spark df, add city column
+    df = icbc_df.select(concat_ws(',', icbc_df['Street Full Name (ifnull)'], icbc_df['Municipality Name'])
+                        .alias('city'), 'Latitude', 'Longitude')
+    
+    lon_lat_null_df = df.filter(df['Latitude'].isNull() | df['Longitude'].isNull())
+    
+    city_df = lon_lat_null_df.withColumn("coordinates", geocode_udf(lon_lat_null_df['city'])).cache()
+    
+    city_df.show(truncate=False)
+    
+    #city_df.show(truncate=False)
+    
+    
+    
+    #df = icbc_df.toPandas()
+    #df['city'] = df['Street Full Name (ifnull)'] + ',' + df['Municipality Name']
+    #print(df['city'])
+    
+    #print(df.columns)
+    
+    #lon_lat_null_df = df.loc[df['Latitude'].isnull() | df['Longitude'].isnull()]
+    
+    #print(len(lon_lat_null_df.index))
+    
+    # TODO check null lon, lat columns
+    # perform geocoder on null lon, lat columns
+
+    
+    
+    #lon_lat_null_df['location'] = lon_lat_null_df['city'].progress_apply(geocode)
+    #lon_lat_null_df['point'] = lon_lat_null_df['location'].apply(lambda loc: tuple(loc.point) if loc else None)
+    
+    
+    
+    
 
 
 if __name__ == '__main__':
