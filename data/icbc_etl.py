@@ -82,32 +82,32 @@ def main(spark):
     
     #total_rows = icbc_df.count()
     #print(f'Total rows: {total_rows}')
+    #Total rows: 1360159
 
-    #total_rows = icbc_df.count()
-    #print(f'Total rows: {total_rows}')
     
     #icbc_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/icbc")
     
+    '''
+    cache_file = "geocoded_cache.json"
+    if os.path.exists(cache_file):
+        with open(cache_file, "r") as f:
+            cache = json.load(f)
+    else:
+        cache = {}
+    '''
     
-    #geolocator = Nominatim(user_agent="myGeocoder")
-    #geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-    #location = geolocator.geocode("175 5th Avenue NYC")  
-    #print((location.latitude, location.longitude))
-    
-     
+    '''
     def geocode_function(city):
-        
         geolocator = Nominatim(user_agent="myGeocoder")
         geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
-        
+        time.sleep(2)
         location = geocode(city)
+        
         if location:
             return (location.latitude, location.longitude)
         else:
-            return (None, None)
-        
-        
-        
+            return (None, None)  
+   
         
     geocode_udf = udf(geocode_function, StructType([
         StructField("latitude", DoubleType(), True),
@@ -121,9 +121,11 @@ def main(spark):
     
     lon_lat_null_df = df.filter(df['Latitude'].isNull() | df['Longitude'].isNull())
     
-    city_df = lon_lat_null_df.withColumn("coordinates", geocode_udf(lon_lat_null_df['city'])).cache()
+    city_df = lon_lat_null_df.withColumn("coordinates", geocode_udf(lon_lat_null_df['city']))
     
     city_df.show(truncate=False)
+    '''
+    
     
     #city_df.show(truncate=False)
     

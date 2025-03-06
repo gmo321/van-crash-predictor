@@ -6,10 +6,11 @@ from pyspark.sql.types import StructField, StringType, StructType
 from pyspark.sql import functions as F
 
 
+
 def main(spark):
-    no_cf_path = 'raw/TAS_no_CF.csv'
-    no_city_path = 'raw/TAS_no_city.csv'
-    entity_path = 'raw/TAS_entity.csv'
+    #no_cf_path = 'raw/TAS_no_CF.csv'
+    #no_city_path = 'raw/TAS_no_city.csv'
+    #entity_path = 'raw/TAS_entity.csv'
     
     no_cf_df_schema = types.StructType([
     StructField("Municipality", StringType(), True),
@@ -120,29 +121,66 @@ def main(spark):
                         .option("sep", "\t") \
                         .option("ignoreLeadingWhiteSpace", "true") \
                         .option("encoding", "UTF-16") \
-                        .csv(no_cf_path, schema=no_cf_df_schema)
+                        .csv("s3a://van-crash-data/TAS/raw/TAS_no_CF.csv", schema=no_cf_df_schema)
                         
     no_city_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(no_city_path, schema=no_city_schema)
+                        .csv("s3a://van-crash-data/TAS/raw/TAS_no_city.csv", schema=no_city_schema)
                         
                         
     entity_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(entity_path, schema=entity_schema)
+                        .csv("s3a://van-crash-data/TAS/raw/TAS_entity.csv", schema=entity_schema)
                         
-    no_cf_df.show(1)    
-    no_city_df.show(1)
-    entity_df.show(1)
+                        
+    #total_rows_1 = no_cf_df.count() 107020 
+    #total_rows_2 = no_city_df.count() 106841
+    #total_rows_3 = entity_df.count() 196395
+    #print(f'Total rows: {total_rows_1} \n',
+    #      f'Total rows: {total_rows_2} \n',
+    #      f'Total rows: {total_rows_3} \n')
+
+    #entity_df.select(["Travel Direction"]).show(10, truncate=False)
+    no_cf_df = no_cf_df.drop('In Parking Lot', 'Crash Count', 'Land Use', 'Light', 'On Road', 'Pedestrian Activity', 'Road Character', 'Road Class')
     
+    no_city_df = no_city_df.drop('In Parking Lot', 'Land Use', 'Light', 'On Road', 'Pedestrian Activity', 'Road Character', 'Road Class', 
+                                 'Communication Video Equipment')
+    
+    entity_df = entity_df.drop('Driver License Jurisdiction', 'Vehicle Jurisdiction', "Entity Type", "Entity Count", 'Vehicle Body Style', "Travel Direction")
+    
+    # Check for nulls
+    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show() # Speed zone - 30
+    #no_city_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_city_df.columns]).show()
+    #entity_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in entity_df.columns]).show() # Collision Type - 88
+    
+    # Drop null rows
+    no_cf_df = no_cf_df.dropna()
+    no_city_df = no_city_df.dropna()
+    entity_df = entity_df.dropna()
+    
+    no_cf_df.show(3, truncate=False)
+    no_city_df.show(3, truncate=False)
+    entity_df.show(3, truncate=False)
+
+    # TODO clean columns:                                      
+    # two way traffic
+    # vehicle model year
+
+    # Count the duplicate rows
+    #original_count = no_cf_df.count()
+    #deduped_count = no_cf_df.dropDuplicates().count()
+    #duplicate_rows = original_count - deduped_count
+    #print(f"Number of duplicate rows: {duplicate_rows}")
+    
+    #duplicates_df = no_cf_df.groupBy(no_cf_df.columns).count().filter("count > 1")
+    #duplicates_df.show(truncate=False)
     
     #no_cf_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/no_cf")
     #no_city_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/no_city")
     #entity_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/entity")
-                                          
-   
+    
     # Read parquet files
     #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
     
