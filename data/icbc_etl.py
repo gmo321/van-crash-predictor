@@ -1,6 +1,9 @@
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
+import pandas as pd
+from geopy.geocoders import Nominatim
+import time
 
 from pyspark.sql import SparkSession, functions, types
 from pyspark.sql.types import *
@@ -65,7 +68,7 @@ def main(spark):
         'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Cross Street Full Name', 'Street Full Name')
     
 
-    icbc_df.select('Intersection Crash', 'Street Full Name', 'Month Of Year').show(truncate=False)
+    icbc_df.select('Street Full Name (ifnull)', "Municipality Name", "Region").show(truncate=False)
     #icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
     
     # Generate unique ID as key column
@@ -77,14 +80,16 @@ def main(spark):
     #total_rows = icbc_df.count()
     #print(f'Total rows: {total_rows}')
 
-    total_rows = icbc_df.count()
-    print(f'Total rows: {total_rows}')
+    #total_rows = icbc_df.count()
+    #print(f'Total rows: {total_rows}')
     
     #icbc_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/icbc")
     
     
+    geolocator = Nominatim(user_agent="myGeocoder")
     
-               
+    #location = geolocator.geocode("175 5th Avenue NYC")  
+    #print((location.latitude, location.longitude))        
 
 
 
