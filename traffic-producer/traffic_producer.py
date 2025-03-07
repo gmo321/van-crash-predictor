@@ -33,7 +33,7 @@ def send_to_kafka(topic, data):
         logging.error(f"Error sending to Kafka: {e}")
         
     
-def poll_and_send_data(interval=30):
+def poll_and_send_data(interval=10):
     point = "49.2827,-123.1207"
     
     while True:
