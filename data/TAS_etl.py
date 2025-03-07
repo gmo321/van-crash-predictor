@@ -6,10 +6,11 @@ from pyspark.sql.types import StructField, StringType, StructType
 from pyspark.sql import functions as F
 
 
+
 def main(spark):
-    no_cf_path = 'raw/TAS_no_CF.csv'
-    no_city_path = 'raw/TAS_no_city.csv'
-    entity_path = 'raw/TAS_entity.csv'
+    #no_cf_path = 'raw/TAS_no_CF.csv'
+    #no_city_path = 'raw/TAS_no_city.csv'
+    #entity_path = 'raw/TAS_entity.csv'
     
     no_cf_df_schema = types.StructType([
     StructField("Municipality", StringType(), True),
@@ -120,36 +121,154 @@ def main(spark):
                         .option("sep", "\t") \
                         .option("ignoreLeadingWhiteSpace", "true") \
                         .option("encoding", "UTF-16") \
-                        .csv(no_cf_path, schema=no_cf_df_schema)
+                        .csv("s3a://van-crash-data/TAS/raw/TAS_no_CF.csv", schema=no_cf_df_schema).repartition(60)
                         
     no_city_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(no_city_path, schema=no_city_schema)
+                        .csv("s3a://van-crash-data/TAS/raw/TAS_no_city.csv", schema=no_city_schema).repartition(60)
                         
                         
     entity_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv(entity_path, schema=entity_schema)
+                        .csv("s3a://van-crash-data/TAS/raw/TAS_entity.csv", schema=entity_schema).repartition(60)
                         
-    no_cf_df.show(1)    
-    no_city_df.show(1)
-    entity_df.show(1)
+                        
+    #total_rows_1 = no_cf_df.count() 107020 
+    #total_rows_2 = no_city_df.count() 106841
+    #total_rows_3 = entity_df.count() 196395
+    #print(f'Total rows: {total_rows_1} \n',
+    #      f'Total rows: {total_rows_2} \n',
+    #      f'Total rows: {total_rows_3} \n')
+
+    #entity_df.select(["Travel Direction"]).show(10, truncate=False)
+    no_cf_df = no_cf_df.drop('In Parking Lot', 'Crash Count', 'Land Use', 'Light', 'On Road', 'Pedestrian Activity', 'Road Character', 'Road Class', 'Speed Advisory')
+    
+    no_city_df = no_city_df.drop('In Parking Lot', 'Land Use', 'Light', 'On Road', 'Pedestrian Activity', 'Road Character', 'Road Class', 
+                                 'Communication Video Equipment', 'Speed Advisory')
+    
+    entity_df = entity_df.drop('Driver License Jurisdiction', 'Vehicle Jurisdiction', "Entity Type", "Entity Count", 'Vehicle Body Style', "Travel Direction")
+    
+    # Check for nulls
+    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show() # Speed zone - 30
+    #no_city_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_city_df.columns]).show()
+    #entity_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in entity_df.columns]).show() # Collision Type - 88
+    
+    # Drop null rows
+    no_cf_df = no_cf_df.dropna()
+    no_city_df = no_city_df.dropna()
+    entity_df = entity_df.dropna()
+
+    
+    # Regex to remove unwanted (non-ASCII) characters
+    no_cf_df = no_cf_df.withColumn("Traffic Flow", F.regexp_replace(F.col("Traffic Flow"), "[^\x00-\x7F]", ""))
+    entity_df = entity_df.withColumn("Vehicle Model Year", F.regexp_replace(F.col("Vehicle Model Year"), "[^\x00-\x7F]", ""))
+    
+    #no_cf_df.show(3, truncate=False)
+    #no_city_df.show(3, truncate=False)
+    #entity_df.show(3, truncate=False)
+    
+
+    # Clean column 'Speed Zone' to extract speed in Km/H
+    no_cf_df = no_cf_df.withColumn('Speed Zone',
+                                   F.when(F.col("Speed Zone").rlike(r"\d+\s*Km/H"),  
+                                    F.regexp_extract(F.col("Speed Zone"), r"(\d+)\s*Km/H", 1)
+                                ).otherwise(F.lit(None))
+    )
+    
+    #no_cf_df = no_cf_df.select(['Speed Zone']).show(50, truncate=False)
+    
+    # See where the nulls are concentrated
+    #no_cf_df.filter(F.col("Speed Zone").isNull()).groupBy("Municipality").count().show()
+
+    # TODO some columns have nulls or "Not applicable" etc. 
+    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
+    # speed zone nulls: 17079
+    
+    #[('Municipality', 'string'), ('Year', 'string'), ('Accident Type', 'string'), ('Collision Type', 'string'),
+    # ('Crash Configuration', 'string'), ('Cyclist Involved', 'string'), ('Hit And Run Indicator', 'string'), 
+    # ('Impact With Animal', 'string'), ('Month', 'string'), ('Motorcycle Involved', 'string'), ('Pedestrian Involved', 'string'), 
+    # ('Region', 'string'), ('Road Condition', 'string'), ('Weather', 'string'), ('Total Casualty', 'string'),
+    # ('Total Vehicles Involved', 'string'), ('Road Surface', 'string'), ('Speed Advisory', 'string'), ('Speed Zone', 'string'),
+    # ('Traffic Control', 'string'), ('Traffic Flow', 'string')]
+
+    # TODO Merge Datasets:       
     
     
-    #no_cf_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/no_cf")
-    #no_city_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/no_city")
-    #entity_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/TAS/entity")
-                                          
-   
+    #print(no_cf_df.columns)
+    #['Municipality', 'Year', 'Accident Type', 'Collision Type', 'Crash Configuration', 'Cyclist Involved', 'Hit And Run Indicator', 'Impact With Animal', 
+    # 'Month', 'Motorcycle Involved', 'Pedestrian Involved', 'Region', 'Road Condition', 'Weather', 'Total Casualty', 'Total Vehicles Involved', 
+    # 'Road Surface', 'Speed Zone', 'Traffic Control', 'Traffic Flow']
+    #print(no_city_df.columns)
+    #['Region', 'Year', 'Accident Type', 'Alcohol Involved', 'Collision Type', 'Crash Configuration', 'Cyclist Involved', 'Distraction Involved', 
+    # 'Driving Too Fast', 'Drug Involved', 'Exceeding Speed', 'Excessive Speed', 'Fell Asleep', 'Impact With Animal', 'Impaired Involved', 
+    # 'Month', 'Motorcycle Involved', 'Pedestrian Involved', 'Road Condition', 'Speed Involved', 'Weather', 'Crash Count', 'Total Casualty', 
+    # 'Total Vehicles Involved', 'Driver In Ext Distraction', 'Driver Inattentive', 'Driving Without Due Care', 'Hit And Run Indicator', 
+    # 'Road Surface', 'Speed Advisory', 'Speed Zone', 'Traffic Control', 'Traffic Flow']
+    #print(entity_df.columns)
+    #['Region', 'Year', 'Accident Type', 'Age Range', 'Contributing Factor 1', 'Contributing Factor 2', 'Contributing Factor 3', 'Contributing Factor 4', 
+    # 'Crash Configuration', 'Gender', 'Month', 'Vehicle Type', 'Vehicle Use', 'Collision Type', 'Damage Location', 'Damage Severity', 'Pre Action', 
+    # 'Vehicle Make', 'Vehicle Model Year']
+    
+    #no_cf_df = no_cf_df.withColumnsRenamed({'Cyclist Involved': 'Cyclist Involved_cf', 
+    #                                      'Hit And Run Indicator': 'Hit And Run Indicator_cf',
+    #                                      'Impact With Animal': 'Impact With Animal_cf',
+    #                                      'Motorcycle Involved': 'Motorcycle Involved_cf',
+    #                                      'Pedestrian Involved': 'Pedestrian Involved_cf',
+    #                                      'Road Condition': 'Road Condition_cf',
+    #                                      'Weather': 'Weather_cf',
+    #                                      'Total Casualty': 'Total Casualty_cf',
+    #                                      'Total Vehicles Involved': 'Total Vehicles Involved_cf',
+    #                                      'Road Surface': 'Road Surface_cf',
+    #                                      'Speed Zone': 'Speed Zone_cf',
+    #                                      'Traffic Control': 'Traffic Control_cf',
+    #                                      'Traffic Flow': 'Traffic Flow_cf'
+    #                                      }) 
+
+
+    # Common Columns: {'Cyclist Involved', 'Hit And Run Indicator', 'Impact With Animal', 'Motorcycle Involved', 
+    # 'Pedestrian Involved', 'Road Condition', 'Weather', 'Total Casualty', 'Total Vehicles Involved', 
+    # 'Road Surface', 'Speed Zone', 'Traffic Control', 'Traffic Flow'}
+                   
+
+    #merged_df = no_cf_df.join(no_city_df, on=["Region", "Year", "Month", "Accident Type", "Collision Type",
+    #                                          "Crash Configuration"], how="inner")
+    
+    #merged_df.show(2, truncate=False)
+    
+    #print(merged_df.count()) #2434147
+    
+    
+    
+    # Select only the columns you need, dropping duplicates
+    
+    #merged_df_clean = merged_df.select(
+    #    "Region", "Year", "Month", "Accident Type",
+    #    "Collision Type", "Crash Configuration", "Cyclist Involved", 
+    #    "Hit And Run Indicator", "Impact With Animal", "Motorcycle Involved", 
+    #    "Pedestrian Involved", "Road Condition", "Weather", "Total Casualty", 
+    #    "Total Vehicles Involved", "Road Surface", "Speed Zone", "Traffic Control", 
+    #    "Traffic Flow",  # Columns from no_cf_df
+    #    "Alcohol Involved", "Distraction Involved", "Driving Too Fast", 
+    #    "Drug Involved", "Exceeding Speed", "Excessive Speed", "Fell Asleep", 
+    #    "Impaired Involved", "Driver In Ext Distraction", "Driver Inattentive", 
+    #    "Driving Without Due Care", "Crash Count"  # Columns from no_city_df
+    #)
+                                            
+    
+
+    no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
+    no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
+    entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
+    
     # Read parquet files
     #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
     
     #no_cf_df_parquet.show()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  
     spark = SparkSession.builder \
         .appName('Traffic Accident System etl') \
         .getOrCreate()

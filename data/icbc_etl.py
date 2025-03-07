@@ -1,11 +1,24 @@
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
+#from geopy.geocoders import Nominatim
+#from geopy.extra.rate_limiter import RateLimiter
+#from geopy.exc import GeocoderTimedOut
+import time
+import os
+import json
+import requests
+import logging
 
 from pyspark.sql import SparkSession, functions, types
 from pyspark.sql.types import *
 from pyspark.sql import functions as F
-from pyspark.sql.functions import monotonically_increasing_id
+from pyspark.sql.functions import monotonically_increasing_id, concat_ws, col, lit, udf, broadcast, concat, pandas_udf
+
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def main(spark):
@@ -47,45 +60,82 @@ def main(spark):
     icbc_df = spark.read.option("header", True) \
                         .option("sep", "\t") \
                         .option("encoding", "UTF-16") \
-                        .csv("s3a://van-crash-data/icbc/raw/ICBC_BC_full.csv", schema=df_schema)
-                        
-
-    #icbc_df.show(1)
-    
-    # Checking for duplicate columns
-    icbc_df = icbc_df.withColumn('is_duplicate', 
-                                 F.when(F.col('Street Full Name') == F.col('Street Full Name (ifnull)'), F.lit(True))
-                                 .otherwise(F.lit(False)))
-    
-    diff_rows = icbc_df.filter(F.col('is_duplicate') == False).select('Street Full Name', 'Street Full Name (ifnull)')
+                        .csv("s3a://van-crash-data/icbc/raw/ICBC_BC_full.csv", schema=df_schema).repartition(100)
     
     
     # Drop unnecessary columns
     icbc_df = icbc_df.drop('Crash Breakdown 2', 'Municipality With Boundary', 'Animal Flag', 'Cyclist Flag', 'Heavy Vehicle Flag', 'Motorcycle Flag', \
-        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Cross Street Full Name', 'Street Full Name')
+        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Street Full Name', "Road Location Description")
     
-
-    icbc_df.select('Intersection Crash', 'Street Full Name', 'Month Of Year').show(truncate=False)
-    #icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
+    # Columns
+    #['Date Of Loss Year', 'Crash Severity', 'Day Of Week', 'Derived Crash Configuration', 'Intersection Crash', 'Month Of Year', 
+    # 'Region', 'Street Full Name (ifnull)', 'Time Category', 'Municipality Name', 'Total Crashes', 'Total Victims', 'Latitude', 
+    # 'Cross Street Full Name', 'Longitude', 'Mid Block Crash', 'is_duplicate']
+    
+    #icbc_df.select('Cross Street Full Name', 'Street Full Name (ifnull)').show(truncate=False)
+    
+    icbc_df = icbc_df.withColumnsRenamed({'Date Of Loss Year': 'year', 
+                                          'Crash Severity': 'crash_severity', 
+                                          'Day Of Week': 'day', 
+                                          'Derived Crash Configuration': 'crash_config',
+                                          'Intersection Crash': 'is_intersection_crash', 
+                                          'Month Of Year': 'month',
+                                          'Region':'region', 
+                                          'Street Full Name (ifnull)': 'street',
+                                          'Time Category': 'time',
+                                          'Municipality Name': 'municipality',
+                                          'Total Crashes':'total_crashes',
+                                          'Total Victims':'total_victims',
+                                          'Latitude':'latitude',
+                                          'Cross Street Full Name':'cross_street',
+                                          'Longitude': 'longitude',
+                                          'Mid Block Crash': 'is_mid_block'})
+    
+    
+    # Create 'city' column
+    icbc_df = icbc_df.withColumn('city', concat_ws(', ', icbc_df['street'], icbc_df['municipality']))
+    
+    #icbc_df = icbc_df.withColumn('city', concat(icbc_df['city'], lit(', BC')))
+    #icbc_df.show(truncate=False)
+    
+    
+    #print(lon_lat_null_df.count())     # Rows where cross_street is null but not lon, lat: 517147  
+    # Number of null lon, lat rows: 270063
+    # Number of distinct cities and lat, lon is NULL: 54340 --> Only need to geocode 54340
     
     # Generate unique ID as key column
-    icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
+    #icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
     
     # TODO check nulls, duplicate rows
-    icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
+    # perform geocoder on null lon, lat columns
+    #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     
     #total_rows = icbc_df.count()
     #print(f'Total rows: {total_rows}')
+    #Total rows: 1360159
 
-    total_rows = icbc_df.count()
-    print(f'Total rows: {total_rows}')
     
-    #icbc_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/icbc")
+    icbc_df.write.parquet("data/parquet/icbc", compression='LZ4', mode='overwrite')
     
     
+    # Combine Street Name and municipality
+    #df = icbc_df.select(concat_ws(',', icbc_df['Street Full Name (ifnull)'], icbc_df['Municipality Name'])
+    #                    .alias('city'), 'Latitude', 'Longitude')
     
-               
+    # Get distinct cities where lat/lon is missing
+    #lon_lat_null_df = df.filter(df['Latitude'].isNull() | df['Longitude'].isNull()).select('city').distinct()
+    
+    #lon_lat_null_df.show(truncate=False)
+    
+    #total_rows = lon_lat_null_df.count()
+    #print(f'Total rows lon, lat null: {total_rows}')
+    #54340 NULL
+    
 
+
+    
+    
+    
 
 
 if __name__ == '__main__':
