@@ -73,12 +73,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-def fetch_bulk_data():
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = executor.map(fetch_traffic_data, points)
-    return {"traffic_data": list(results)}
-
 bulk_data = fetch_bulk_data()
 with open("traffic_data.json", "w") as file:
     json.dump(bulk_data, file, indent=4)
