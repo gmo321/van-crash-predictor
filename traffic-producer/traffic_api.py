@@ -3,6 +3,9 @@ import os
 import json
 import logging
 import concurrent.futures
+from dotenv import load_dotenv
+
+load_dotenv()
 
 points = [
     "49.2827,-123.1207",  # Downtown Vancouver
@@ -14,7 +17,7 @@ points = [
 ]
 
 
-api_key = "eeXhi92TTAhIGDTzetiO5LqCIva2m26p"
+api_key = os.getenv("TRAFFIC_API_KEY")
 url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
 
 
