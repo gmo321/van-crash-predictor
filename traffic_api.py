@@ -37,7 +37,7 @@ def fetch_traffic_data(point):
         'openLr': False,
         'jsonp': False
     }
-    try: 
+    try:
         response = requests.get(url, params=params)
         
         response.raise_for_status()
