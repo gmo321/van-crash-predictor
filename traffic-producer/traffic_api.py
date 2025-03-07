@@ -14,7 +14,7 @@ points = [
 ]
 
 
-api_key = ""
+api_key = "eeXhi92TTAhIGDTzetiO5LqCIva2m26p"
 url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
 
 
