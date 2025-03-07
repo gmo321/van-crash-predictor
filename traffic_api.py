@@ -1,6 +1,7 @@
 import requests
 import os
 import json
+import logging
 import concurrent.futures
 
 points = [
@@ -24,6 +25,8 @@ def fetch_traffic_data(point):
         point (str): The geographical point for which to fetch traffic data.
     Returns:
         dict: The traffic data in JSON format.
+    Raises:
+        requests.exceptions.RequestException: If the request to the traffic API fails.
     """
     
     params = {
@@ -34,13 +37,47 @@ def fetch_traffic_data(point):
         'openLr': False,
         'jsonp': False
     }
-    response = requests.get(url, params=params)
-    return response.json()
+    try: 
+        response = requests.get(url, params=params)
+        
+        response.raise_for_status()
+        data = response.json()
+            
+        segment_data = data.get("flowSegmentData", {})
+        return {
+            "latitude": float(point.split(",")[0]),
+            "longitude": float(point.split(",")[1]),
+            "current_speed": segment_data.get("currentSpeed", "N/A"),
+            "free_flow_speed": segment_data.get("freeFlowSpeed", "N/A"),
+            "current_travel_time": segment_data.get("currentTravelTime", "N/A"),
+            "free_flow_travel_time": segment_data.get("freeFlowTravelTime", "N/A"),
+            "confidence": segment_data.get("confidence", "N/A"),
+            "road_closure": segment_data.get("roadClosure", "N/A")
+        }
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error fetching traffic data for {point}: {e}")
+        return None
+
+def fetch_bulk_data():
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = list(executor.map(fetch_traffic_data, points
+))
+    return {"traffic_data": [res for res in results if res]}
+
+def main():
+    data = fetch_bulk_data()
+    print(data)
+    with open("traffic_data.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+if __name__ == "__main__":
+    main()
+
 
 def fetch_bulk_data():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(fetch_traffic_data, points)
-    return {"traffic_data": list(results)} 
+    return {"traffic_data": list(results)}
 
 bulk_data = fetch_bulk_data()
 with open("traffic_data.json", "w") as file:
