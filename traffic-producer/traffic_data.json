@@ -53,10 +53,10 @@
         {
             "latitude": 49.2895,
             "longitude": -123.115,
-            "current_speed": 18,
-            "free_flow_speed": 18,
-            "current_travel_time": 40,
-            "free_flow_travel_time": 40,
+            "current_speed": 12,
+            "free_flow_speed": 17,
+            "current_travel_time": 60,
+            "free_flow_travel_time": 42,
             "confidence": 1,
             "road_closure": false
         }
