@@ -1,17 +1,24 @@
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
-import pandas as pd
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+#from geopy.geocoders import Nominatim
+#from geopy.extra.rate_limiter import RateLimiter
+#from geopy.exc import GeocoderTimedOut
 import time
 import os
 import json
+import requests
+import logging
 
 from pyspark.sql import SparkSession, functions, types
 from pyspark.sql.types import *
 from pyspark.sql import functions as F
-from pyspark.sql.functions import monotonically_increasing_id, concat_ws, col, lit, udf
+from pyspark.sql.functions import monotonically_increasing_id, concat_ws, col, lit, udf, broadcast, concat, pandas_udf
+
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def main(spark):
@@ -58,24 +65,49 @@ def main(spark):
 
     #icbc_df.show(1)
     
-    # Checking for duplicate columns
-    icbc_df = icbc_df.withColumn('is_duplicate', 
-                                 F.when(F.col('Street Full Name') == F.col('Street Full Name (ifnull)'), F.lit(True))
-                                 .otherwise(F.lit(False)))
-    
-    diff_rows = icbc_df.filter(F.col('is_duplicate') == False).select('Street Full Name', 'Street Full Name (ifnull)')
-    
     
     # Drop unnecessary columns
     icbc_df = icbc_df.drop('Crash Breakdown 2', 'Municipality With Boundary', 'Animal Flag', 'Cyclist Flag', 'Heavy Vehicle Flag', 'Motorcycle Flag', \
-        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Cross Street Full Name', 'Street Full Name')
+        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Street Full Name', "Road Location Description")
     
-
-    #icbc_df.select('Street Full Name (ifnull)', "Municipality Name", "Region").show(truncate=False)
-    #icbc_df.select('Crash Severity', 'Street Full Name', 'Month Of Year').show(truncate=False)
+    # Columns
+    #['Date Of Loss Year', 'Crash Severity', 'Day Of Week', 'Derived Crash Configuration', 'Intersection Crash', 'Month Of Year', 
+    # 'Region', 'Street Full Name (ifnull)', 'Time Category', 'Municipality Name', 'Total Crashes', 'Total Victims', 'Latitude', 
+    # 'Cross Street Full Name', 'Longitude', 'Mid Block Crash', 'is_duplicate']
+    
+    #icbc_df.select('Cross Street Full Name', 'Street Full Name (ifnull)').show(truncate=False)
+    
+    icbc_df = icbc_df.withColumnsRenamed({'Date Of Loss Year': 'year', 
+                                          'Crash Severity': 'crash_severity', 
+                                          'Day Of Week': 'day', 
+                                          'Derived Crash Configuration': 'crash_config',
+                                          'Intersection Crash': 'is_intersection_crash', 
+                                          'Month Of Year': 'month',
+                                          'Region':'region', 
+                                          'Street Full Name (ifnull)': 'street',
+                                          'Time Category': 'time',
+                                          'Municipality Name': 'municipality',
+                                          'Total Crashes':'total_crashes',
+                                          'Total Victims':'total_victims',
+                                          'Latitude':'latitude',
+                                          'Cross Street Full Name':'cross_street',
+                                          'Longitude': 'longitude',
+                                          'Mid Block Crash': 'is_mid_block'})
+    
+    
+    # Create 'city' column
+    icbc_df = icbc_df.withColumn('city', concat_ws(', ', icbc_df['street'], icbc_df['municipality']))
+    
+    #icbc_df = icbc_df.withColumn('city', concat(icbc_df['city'], lit(', BC')))
+    #icbc_df.show(truncate=False)
+    
+    
+    #print(lon_lat_null_df.count())     # Rows where cross_street is null but not lon, lat: 517147  
+    # Number of null lon, lat rows: 270063
+    # Number of distinct cities and lat, lon is NULL: 54340 --> Only need to geocode 54340
     
     # Generate unique ID as key column
-    icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
+    #icbc_df = icbc_df.withColumn('id', monotonically_increasing_id())
     
     # TODO check nulls, duplicate rows
     #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
@@ -87,68 +119,117 @@ def main(spark):
     
     #icbc_df.write.options(compression='LZ4', mode='overwrite').parquet("parquet/icbc")
     
-    '''
-    cache_file = "geocoded_cache.json"
-    if os.path.exists(cache_file):
-        with open(cache_file, "r") as f:
-            cache = json.load(f)
-    else:
-        cache = {}
-    '''
+    DAILY_LIMIT = 40000
+    request_counter = 0
     
-    '''
-    def geocode_function(city):
-        geolocator = Nominatim(user_agent="myGeocoder")
-        geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
-        time.sleep(2)
-        location = geocode(city)
+    def geocode_data(address):
+        API_KEY = 'AIzaSyAz_l8je7Wp1Vxd3PG7apLagAys4MOd9v4'
+        url = 'https://maps.googleapis.com/maps/api/geocode/json?parameters'
+        if not address:
+            return None, None
         
-        if location:
-            return (location.latitude, location.longitude)
-        else:
-            return (None, None)  
-   
+        params = {
+            'key': API_KEY,
+            'address': address,
+            'components': 'country:CA'
+            
+        }
         
-    geocode_udf = udf(geocode_function, StructType([
-        StructField("latitude", DoubleType(), True),
-        StructField("longitude", DoubleType(), True)
-    ]))
-                
-
-    # TODO keep as spark df, add city column
-    df = icbc_df.select(concat_ws(',', icbc_df['Street Full Name (ifnull)'], icbc_df['Municipality Name'])
-                        .alias('city'), 'Latitude', 'Longitude')
+        try:
+            response = requests.get(url, params=params)
+            response.raise_for_status()
+            response_json = response.json()
+            
+            if response_json.get('status') == 'OK' and response_json.get('results'):
+            #print(response_json)
+                lat = response_json.get('results', {})[0].get('geometry', 'Unknown').get('location', 'Unknown').get('lat', 'No latitude available')
+                lon = response_json.get('results', {})[0].get('geometry', 'Unknown').get('location', 'Unknown').get('lng', 'No longitude available')
+                return lat, lon
+            else:
+                logging.warning(f"No results found for address: {address}")
+                return None, None
+        
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Error fetching weather data: {e}")
+            return None, None
     
-    lon_lat_null_df = df.filter(df['Latitude'].isNull() | df['Longitude'].isNull())
+    # Define UDFs for geocoding
+    @pandas_udf(DoubleType())
+    def geocode_lat_udf(addresses: pd.Series) -> pd.Series:
+        return addresses.apply(lambda x: geocode_data(x)[0])
     
-    city_df = lon_lat_null_df.withColumn("coordinates", geocode_udf(lon_lat_null_df['city']))
+    @pandas_udf(DoubleType())
+    def geocode_lon_udf(addresses: pd.Series) -> pd.Series:
+        return addresses.apply(lambda x: geocode_data(x)[1])
     
-    city_df.show(truncate=False)
-    '''
+    # Filter rows with missing latitude and longitude
+    missing_lat_lon_df = icbc_df.filter((icbc_df['latitude'].isNull()) | (icbc_df['longitude'].isNull()))
+    
+    # Extract distinct cities
+    distinct_cities_df = missing_lat_lon_df.select('city').distinct()
+    
+    distinct_cities_df = distinct_cities_df.withColumn('id', monotonically_increasing_id())
+    
+    # Process in batches
+    batch_size = 1000
+    total_rows = distinct_cities_df.count()
+    batches = (total_rows // batch_size) + 1
+    
+    for batch_num in range(batches):
+        # Check if the daily limit has been reached
+        if request_counter >= DAILY_LIMIT:
+            logger.warning(f"Daily limit of {DAILY_LIMIT} requests reached. Stopping processing.")
+            break
+    
+        start_idx = batch_num * batch_size
+        end_idx = start_idx + batch_size
+        
+        # Filter the current batch using the 'id' column
+        batch_df = distinct_cities_df.filter((col("id") >= start_idx) & (col("id") < end_idx))
+        
+        # Geocode the batch
+        batch_df = batch_df.withColumn("latitude", geocode_lat_udf(batch_df['city'])) \
+                           .withColumn("longitude", geocode_lon_udf(batch_df['city']))
+        
+        # Increment the request counter by the number of rows in the batch
+        request_counter += batch_df.count()
+    
+        # Write the batch to output
+        batch_df.write.mode("append").parquet("/Users/gloriamo/Desktop/van-crash-predictor/data/geocoded")
+        
+        logger.info(f"Processed batch {batch_num + 1}/{batches} with {batch_df.count()} rows")
+        logger.info(f"Total requests made so far: {request_counter}")
+        
+        # Sleep to respect API rate limits
+        time.sleep(5)
+    
+    # Log the total number of requests made
+    logger.info(f"Total requests made: {request_counter}")
+    
+    # Read all geocoded cities
+    geocoded_cities_df = spark.read.parquet("/Users/gloriamo/Desktop/van-crash-predictor/data/geocoded")
+    
+    geocoded_cities_df.show(truncate=False)
     
     
-    #city_df.show(truncate=False)
     
     
+    # Combine Street Name and municipality
+    #df = icbc_df.select(concat_ws(',', icbc_df['Street Full Name (ifnull)'], icbc_df['Municipality Name'])
+    #                    .alias('city'), 'Latitude', 'Longitude')
     
-    #df = icbc_df.toPandas()
-    #df['city'] = df['Street Full Name (ifnull)'] + ',' + df['Municipality Name']
-    #print(df['city'])
+    # Get distinct cities where lat/lon is missing
+    #lon_lat_null_df = df.filter(df['Latitude'].isNull() | df['Longitude'].isNull()).select('city').distinct()
     
-    #print(df.columns)
+    #lon_lat_null_df.show(truncate=False)
     
-    #lon_lat_null_df = df.loc[df['Latitude'].isnull() | df['Longitude'].isnull()]
-    
-    #print(len(lon_lat_null_df.index))
+    #total_rows = lon_lat_null_df.count()
+    #print(f'Total rows lon, lat null: {total_rows}')
+    #54340 NULL
     
     # TODO check null lon, lat columns
     # perform geocoder on null lon, lat columns
 
-    
-    
-    #lon_lat_null_df['location'] = lon_lat_null_df['city'].progress_apply(geocode)
-    #lon_lat_null_df['point'] = lon_lat_null_df['location'].apply(lambda loc: tuple(loc.point) if loc else None)
-    
     
     
     
