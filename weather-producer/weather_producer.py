@@ -43,7 +43,7 @@ def poll_and_send_data(interval=30):
 def main():
     logging.info("Starting data polling process.")
     try:
-        poll_and_send_data(interval=30)  
+        poll_and_send_data(interval=10)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:
