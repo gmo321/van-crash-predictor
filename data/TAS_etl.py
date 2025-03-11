@@ -150,6 +150,11 @@ def main(spark):
     
     entity_df = entity_df.drop('Driver License Jurisdiction', 'Vehicle Jurisdiction', "Entity Type", "Entity Count", 'Vehicle Body Style', "Travel Direction")
     
+    
+
+    
+    
+    
     # Check for nulls
     #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show() # Speed zone - 30
     #no_city_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_city_df.columns]).show()
@@ -159,21 +164,98 @@ def main(spark):
     no_cf_df = no_cf_df.dropna()
     no_city_df = no_city_df.dropna()
     entity_df = entity_df.dropna()
-
+    
+    
+    # Renaming columns for consistency    
+    no_cf_df = no_cf_df.withColumnsRenamed({'Municipality': 'municipality', 
+                                          'Year': 'year', 
+                                          'Accident Type': 'accident_type', 
+                                          'Collision Type': 'collision_type',
+                                          'Crash Configuration': 'crash_configuration', 
+                                          'Cyclist Involved': 'cyclist_involved',
+                                          'Hit And Run Indicator':'hit_and_run_indicator', 
+                                          'Impact With Animal': 'impact_with_animal',
+                                          'Month': 'month',
+                                          'Motorcycle Involved': 'motorcycle_involved',
+                                          'Pedestrian Involved':'pedestrian_involved',
+                                          'Region':'region',
+                                          'Road Condition':'road_condition',
+                                          'Weather':'weather',
+                                          'Total Casualty': 'total_casualty',
+                                          'Total Vehicles Involved': 'total_vehicles_involved',
+                                          'Road Surface':'road_surface',
+                                          'Speed Zone':'speed_zone',
+                                          'Traffic Control':'traffic_control',
+                                          'Traffic Flow':'traffic_flow'})
+    
+    no_city_df = no_city_df.withColumnsRenamed({'Region': 'region', 
+                                                'Year': 'year', 
+                                                'Accident Type': 'accident_type', 
+                                                'Alcohol Involved': 'alcohol_involved', 
+                                                'Collision Type': 'collision_type', 
+                                                'Crash Configuration': 'crash_configuration', 
+                                                'Cyclist Involved': 'cyclist_involved', 
+                                                'Distraction Involved': 'distraction_involved', 
+                                                'Driving Too Fast': 'driving_too_fast', 
+                                                'Drug Involved': 'drug_involved', 
+                                                'Exceeding Speed': 'exceeding_speed', 
+                                                'Excessive Speed': 'excessive_speed', 
+                                                'Fell Asleep': 'fell_asleep', 
+                                                'Impact With Animal': 'impact_with_animal', 
+                                                'Impaired Involved': 'impaired_involved', 
+                                                'Month': 'month', 
+                                                'Motorcycle Involved': 'motorcycle_involved', 
+                                                'Pedestrian Involved': 'pedestrian_involved', 
+                                                'Road Condition': 'road_condition', 
+                                                'Speed Involved': 'speed_involved', 
+                                                'Weather': 'weather', 
+                                                'Crash Count': 'crash_count', 
+                                                'Total Casualty': 'total_casualty', 
+                                                'Total Vehicles Involved': 'total_vehicles_involved', 
+                                                'Driver In Ext Distraction': 'driver_in_ext_distraction', 
+                                                'Driver Inattentive': 'driver_inattentive', 
+                                                'Driving Without Due Care': 'driving_without_due_care', 
+                                                'Hit And Run Indicator': 'hit_and_run_indicator', 
+                                                'Road Surface': 'road_surface', 
+                                                'Speed Zone': 'speed_zone', 
+                                                'Traffic Control': 'traffic_control', 
+                                                'Traffic Flow': 'traffic_flow'})
+    
+    entity_df = entity_df.withColumnsRenamed({'Region': 'region',
+                                            'Year': 'year',
+                                            'Accident Type': 'accident_type',
+                                            'Age Range': 'age_range',
+                                            'Contributing Factor 1': 'contributing_factor_1',
+                                            'Contributing Factor 2': 'contributing_factor_2',
+                                            'Contributing Factor 3': 'contributing_factor_3',
+                                            'Contributing Factor 4': 'contributing_factor_4',
+                                            'Crash Configuration': 'crash_configuration',
+                                            'Gender': 'gender',
+                                            'Month': 'month',
+                                            'Vehicle Type': 'vehicle_type',
+                                            'Vehicle Use': 'vehicle_use',
+                                            'Collision Type': 'collision_type',
+                                            'Damage Location': 'damage_location',
+                                            'Damage Severity': 'damage_severity',
+                                            'Pre Action': 'pre_action',
+                                            'Vehicle Make': 'vehicle_make',
+                                            'Vehicle Model Year': 'vehicle_model_year'})
+    
+    
     
     # Regex to remove unwanted (non-ASCII) characters
-    no_cf_df = no_cf_df.withColumn("Traffic Flow", F.regexp_replace(F.col("Traffic Flow"), "[^\x00-\x7F]", ""))
-    entity_df = entity_df.withColumn("Vehicle Model Year", F.regexp_replace(F.col("Vehicle Model Year"), "[^\x00-\x7F]", ""))
+    no_cf_df = no_cf_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
+    entity_df = entity_df.withColumn("vehicle_model_year", F.regexp_replace(F.col("vehicle_model_year"), "[^\x00-\x7F]", ""))
     
-    #no_cf_df.show(3, truncate=False)
+    no_cf_df.show(3, truncate=False)
     #no_city_df.show(3, truncate=False)
     #entity_df.show(3, truncate=False)
     
 
     # Clean column 'Speed Zone' to extract speed in Km/H
-    no_cf_df = no_cf_df.withColumn('Speed Zone',
-                                   F.when(F.col("Speed Zone").rlike(r"\d+\s*Km/H"),  
-                                    F.regexp_extract(F.col("Speed Zone"), r"(\d+)\s*Km/H", 1)
+    no_cf_df = no_cf_df.withColumn('speed_zone',
+                                   F.when(F.col("speed_zone").rlike(r"\d+\s*Km/H"),  
+                                    F.regexp_extract(F.col("speed_zone"), r"(\d+)\s*Km/H", 1)
                                 ).otherwise(F.lit(None))
     )
     
@@ -257,10 +339,10 @@ def main(spark):
     #)
                                             
     
-
-    no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
-    no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
-    entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
+    # Write parquet files
+    #no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
+    #no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
+    #entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
     
     # Read parquet files
     #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
