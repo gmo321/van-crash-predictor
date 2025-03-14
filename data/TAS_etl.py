@@ -217,7 +217,10 @@ def main(spark):
                                           'Road Surface':'road_surface',
                                           'Speed Zone':'speed_zone',
                                           'Traffic Control':'traffic_control',
-                                          'Traffic Flow':'traffic_flow'})
+                                          'Traffic Flow':'traffic_flow',
+                                          'Light':'light',
+                                          'On Road':'on_road',
+                                          'Speed Advisory':'speed_advisory'})
     
     no_city_df = no_city_df.withColumnsRenamed({'Region': 'region', 
                                                 'Year': 'year', 
@@ -250,7 +253,10 @@ def main(spark):
                                                 'Road Surface': 'road_surface', 
                                                 'Speed Zone': 'speed_zone', 
                                                 'Traffic Control': 'traffic_control', 
-                                                'Traffic Flow': 'traffic_flow'})
+                                                'Traffic Flow': 'traffic_flow',
+                                                'Light':'light',
+                                                'On Road':'on_road',
+                                                'Speed Advisory':'speed_advisory'})
     
     entity_df = entity_df.withColumnsRenamed({'Region': 'region',
                                             'Year': 'year',
@@ -270,9 +276,8 @@ def main(spark):
                                             'Damage Severity': 'damage_severity',
                                             'Pre Action': 'pre_action',
                                             'Vehicle Make': 'vehicle_make',
+                                            'Vehicle Body Style': 'vehicle_body_style',
                                             'Vehicle Model Year': 'vehicle_model_year'})
-    
-    
     
     # Regex to remove unwanted (non-ASCII) characters
     no_cf_df = no_cf_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
@@ -286,12 +291,6 @@ def main(spark):
     no_cf_df = no_cf_df.withColumn('speed_limit_km_h', F.col('speed_limit_km_h').cast('integer'))
     no_city_df = no_city_df.withColumn('speed_limit_km_h', F.col('speed_limit_km_h').cast('integer'))
     
-    #no_cf_df = no_cf_df.repartition(400)
-    
-    #no_cf_df.show(3, truncate=False)
-    #no_city_df.show(3, truncate=False)
-    #entity_df.show(3, truncate=False)
-  
     
     # Check the distribution of data by municipality
     #no_cf_df.groupBy("municipality").count().orderBy("count", ascending=False).show()
@@ -303,6 +302,7 @@ def main(spark):
     #no_cf_df = no_cf_df.repartition(200)
     
     # Data Imputation of speed_limit_km_h with mode
+    '''
     imputer = Imputer(
         inputCols=['speed_limit_km_h'],
         outputCols=['speed_limit_km_h'],
@@ -314,6 +314,8 @@ def main(spark):
     
     no_cf_df = model.transform(no_cf_df)
     no_city_df = model.transform(no_city_df)
+    '''
+    
     
     
     
@@ -351,25 +353,12 @@ def main(spark):
 
     # Alternatively, write the output to storage
     #no_cf_df.write.csv("/Users/gloriamo/Desktop/van-crash-predictor/data")
+    
+    
     '''
-
-
-    # TODO Merge Datasets:       
-    #merged_df = no_cf_df.join(no_city_df, on=["Region", "Year", "Month", "Accident Type", "Collision Type",
-    #                                          "Crash Configuration"], how="inner")
     
-    #merged_df.show(2, truncate=False)
+    no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
     
-    #print(merged_df.count()) #2434147
-    
-    
-    
-    # Select only the columns you need, dropping duplicates
-    
-    #df = [{'name': 'Alice', 'age': 1}]
-    #spark.createDataFrame(df).show()
-
-    #df.write.parquet("s3a://van-crash-data/test-output", mode='overwrite')
     # Write parquet files
     try:
         no_cf_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_cf", compression='LZ4', mode='overwrite')
@@ -378,6 +367,7 @@ def main(spark):
     except Exception as e:
         print(f"Error writing to S3: {e}")
     
+    # TODO
     # Read parquet files
     #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
     
