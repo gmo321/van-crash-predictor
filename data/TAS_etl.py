@@ -146,12 +146,40 @@ def main(spark):
     #      f'Total rows: {total_rows_3} \n')
 
     # Drop unneccessary columns
-    no_cf_df = no_cf_df.drop('In Parking Lot', 'Crash Count', 'Land Use', 'Light', 'On Road', 'Pedestrian Activity', 'Road Character', 'Road Class', 'Speed Advisory')
+    no_cf_df = no_cf_df.drop('In Parking Lot', 
+                             'Cyclist Involved', 
+                             'Hit And Run Indicator', 
+                             'Crash Count', 
+                             'Motorcycle Involved',
+                             'Land Use',
+                             'Impact With Animal',
+                             'Pedestrian Activity',
+                             'Road Character',
+                             'Road Class')
     
-    no_city_df = no_city_df.drop('In Parking Lot', 'Land Use', 'Light', 'On Road', 'Pedestrian Activity', 'Road Character', 'Road Class', 
-                                 'Communication Video Equipment', 'Speed Advisory')
+    no_city_df = no_city_df.drop('Impact With Animal',
+                                 'In Parking Lot', 
+                                 'Hit And Run Indicator',
+                                 'Impact With Animal',
+                                 'Cyclist Involved',
+                                 'Motorcycle Involved',
+                                 'Land Use', 
+                                 'Pedestrian Activity', 
+                                 'Road Character', 
+                                 'Road Class', 
+                                 'Crash Count',
+                                 'Communication Video Equipment')
     
-    entity_df = entity_df.drop('Driver License Jurisdiction', 'Vehicle Jurisdiction', "Entity Type", "Entity Count", 'Vehicle Body Style', "Travel Direction")
+    entity_df = entity_df.drop('Driver License Jurisdiction', 
+                               'Vehicle Jurisdiction', 
+                               "Entity Type", 
+                               "Entity Count", 
+                               "Travel Direction",
+                               'Contributing Factor 1', 
+                               'Contributing Factor 2', 
+                               'Contributing Factor 3', 
+                               'Contributing Factor 4',
+                               'Vehicle Use')
     
     
     # Check for nulls
@@ -245,9 +273,6 @@ def main(spark):
                                             'Vehicle Model Year': 'vehicle_model_year'})
     
     
-     
-    
-    
     
     # Regex to remove unwanted (non-ASCII) characters
     no_cf_df = no_cf_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
@@ -267,9 +292,6 @@ def main(spark):
     #no_city_df.show(3, truncate=False)
     #entity_df.show(3, truncate=False)
   
-    # Data Imputation of speed_limit_km_h with mode
-    # Get the most frequent speed limit for each municipality
-    # Calculate the mode speed limit per municipality
     
     # Check the distribution of data by municipality
     #no_cf_df.groupBy("municipality").count().orderBy("count", ascending=False).show()
@@ -288,12 +310,12 @@ def main(spark):
     )
     
     model = imputer.fit(no_cf_df)
+    model = imputer.fit(no_city_df)
     
-    imputed_df = model.transform(no_cf_df)
+    no_cf_df = model.transform(no_cf_df)
+    no_city_df = model.transform(no_city_df)
     
-    #imputed_df.show(10, truncate=False)
-  
-    imputed_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in imputed_df.columns]).show()
+    
     
     '''
     # Repartition the DataFrame by municipality
@@ -330,56 +352,9 @@ def main(spark):
     # Alternatively, write the output to storage
     #no_cf_df.write.csv("/Users/gloriamo/Desktop/van-crash-predictor/data")
     '''
-    
-    
-    
-    
 
-    
-
-    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
-    
-    
-    
-    
-    
-    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
-    
-
-    
-    
-    #[('Municipality', 'string'), ('Year', 'string'), ('Accident Type', 'string'), ('Collision Type', 'string'),
-    # ('Crash Configuration', 'string'), ('Cyclist Involved', 'string'), ('Hit And Run Indicator', 'string'), 
-    # ('Impact With Animal', 'string'), ('Month', 'string'), ('Motorcycle Involved', 'string'), ('Pedestrian Involved', 'string'), 
-    # ('Region', 'string'), ('Road Condition', 'string'), ('Weather', 'string'), ('Total Casualty', 'string'),
-    # ('Total Vehicles Involved', 'string'), ('Road Surface', 'string'), ('Speed Advisory', 'string'), ('Speed Zone', 'string'),
-    # ('Traffic Control', 'string'), ('Traffic Flow', 'string')]
 
     # TODO Merge Datasets:       
-    
-    
-    #print(no_cf_df.columns)
-    #['Municipality', 'Year', 'Accident Type', 'Collision Type', 'Crash Configuration', 'Cyclist Involved', 'Hit And Run Indicator', 'Impact With Animal', 
-    # 'Month', 'Motorcycle Involved', 'Pedestrian Involved', 'Region', 'Road Condition', 'Weather', 'Total Casualty', 'Total Vehicles Involved', 
-    # 'Road Surface', 'Speed Zone', 'Traffic Control', 'Traffic Flow']
-    #print(no_city_df.columns)
-    #['Region', 'Year', 'Accident Type', 'Alcohol Involved', 'Collision Type', 'Crash Configuration', 'Cyclist Involved', 'Distraction Involved', 
-    # 'Driving Too Fast', 'Drug Involved', 'Exceeding Speed', 'Excessive Speed', 'Fell Asleep', 'Impact With Animal', 'Impaired Involved', 
-    # 'Month', 'Motorcycle Involved', 'Pedestrian Involved', 'Road Condition', 'Speed Involved', 'Weather', 'Crash Count', 'Total Casualty', 
-    # 'Total Vehicles Involved', 'Driver In Ext Distraction', 'Driver Inattentive', 'Driving Without Due Care', 'Hit And Run Indicator', 
-    # 'Road Surface', 'Speed Advisory', 'Speed Zone', 'Traffic Control', 'Traffic Flow']
-    #print(entity_df.columns)
-    #['Region', 'Year', 'Accident Type', 'Age Range', 'Contributing Factor 1', 'Contributing Factor 2', 'Contributing Factor 3', 'Contributing Factor 4', 
-    # 'Crash Configuration', 'Gender', 'Month', 'Vehicle Type', 'Vehicle Use', 'Collision Type', 'Damage Location', 'Damage Severity', 'Pre Action', 
-    # 'Vehicle Make', 'Vehicle Model Year']
-    
-
-
-    # Common Columns: {'Cyclist Involved', 'Hit And Run Indicator', 'Impact With Animal', 'Motorcycle Involved', 
-    # 'Pedestrian Involved', 'Road Condition', 'Weather', 'Total Casualty', 'Total Vehicles Involved', 
-    # 'Road Surface', 'Speed Zone', 'Traffic Control', 'Traffic Flow'}
-                   
-
     #merged_df = no_cf_df.join(no_city_df, on=["Region", "Year", "Month", "Accident Type", "Collision Type",
     #                                          "Crash Configuration"], how="inner")
     
@@ -391,24 +366,17 @@ def main(spark):
     
     # Select only the columns you need, dropping duplicates
     
-    #merged_df_clean = merged_df.select(
-    #    "Region", "Year", "Month", "Accident Type",
-    #    "Collision Type", "Crash Configuration", "Cyclist Involved", 
-    #    "Hit And Run Indicator", "Impact With Animal", "Motorcycle Involved", 
-    #    "Pedestrian Involved", "Road Condition", "Weather", "Total Casualty", 
-    #    "Total Vehicles Involved", "Road Surface", "Speed Zone", "Traffic Control", 
-    #    "Traffic Flow",  # Columns from no_cf_df
-    #    "Alcohol Involved", "Distraction Involved", "Driving Too Fast", 
-    #    "Drug Involved", "Exceeding Speed", "Excessive Speed", "Fell Asleep", 
-    #    "Impaired Involved", "Driver In Ext Distraction", "Driver Inattentive", 
-    #    "Driving Without Due Care", "Crash Count"  # Columns from no_city_df
-    #)
-                                            
-    
+    #df = [{'name': 'Alice', 'age': 1}]
+    #spark.createDataFrame(df).show()
+
+    #df.write.parquet("s3a://van-crash-data/test-output", mode='overwrite')
     # Write parquet files
-    #no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
-    #no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
-    #entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
+    try:
+        no_cf_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_cf", compression='LZ4', mode='overwrite')
+        no_city_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_city", compression='LZ4', mode='overwrite')
+        entity_df.write.parquet("s3a://van-crash-data/TAS/processed-data/entity", compression='LZ4', mode='overwrite')
+    except Exception as e:
+        print(f"Error writing to S3: {e}")
     
     # Read parquet files
     #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
