@@ -65,7 +65,7 @@ def main(spark):
     
     # Drop unnecessary columns
     icbc_df = icbc_df.drop('Crash Breakdown 2', 'Municipality With Boundary', 'Animal Flag', 'Cyclist Flag', 'Heavy Vehicle Flag', 'Motorcycle Flag', \
-        'Parked Vehicle Flag', 'Parking Lot Flag', 'Pedestrian Flag', 'Metric Selector', 'Municipality Name (ifnull)', 'Street Full Name', "Road Location Description")
+        'Parked Vehicle Flag', 'Parking Lot Flag', 'Metric Selector', 'Mid Block Crash', 'Municipality Name (ifnull)', 'Street Full Name', "Road Location Description")
     
     # Columns
     #['Date Of Loss Year', 'Crash Severity', 'Day Of Week', 'Derived Crash Configuration', 'Intersection Crash', 'Month Of Year', 
@@ -77,23 +77,27 @@ def main(spark):
     icbc_df = icbc_df.withColumnsRenamed({'Date Of Loss Year': 'year', 
                                           'Crash Severity': 'crash_severity', 
                                           'Day Of Week': 'day', 
-                                          'Derived Crash Configuration': 'crash_config',
+                                          'Derived Crash Configuration': 'crash_configuration',
                                           'Intersection Crash': 'is_intersection_crash', 
                                           'Month Of Year': 'month',
                                           'Region':'region', 
                                           'Street Full Name (ifnull)': 'street',
                                           'Time Category': 'time',
+                                          'Pedestrian Flag': 'pedestrian_flag',
                                           'Municipality Name': 'municipality',
                                           'Total Crashes':'total_crashes',
                                           'Total Victims':'total_victims',
+                                          'Cross Street Full Name': 'cross_street',
                                           'Latitude':'latitude',
-                                          'Cross Street Full Name':'cross_street',
-                                          'Longitude': 'longitude',
-                                          'Mid Block Crash': 'is_mid_block'})
+                                          'Longitude': 'longitude'})
     
     
     # Create 'city' column
     icbc_df = icbc_df.withColumn('city', concat_ws(', ', icbc_df['street'], icbc_df['municipality']))
+    
+    #print(icbc_df.columns)
+    #['year', 'crash_severity', 'day', 'crash_config', 'is_intersection_crash', 'month', 'pedestrian_flag', 'region', 
+    # 'street', 'time', 'municipality', 'total_crashes', 'total_victims', 'latitude', 'longitude', 'city']
     
     #icbc_df = icbc_df.withColumn('city', concat(icbc_df['city'], lit(', BC')))
     #icbc_df.show(truncate=False)
@@ -108,14 +112,14 @@ def main(spark):
     
     # TODO check nulls, duplicate rows
     # perform geocoder on null lon, lat columns
-    #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
+    #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show() #1 null in all columns, 270063 null in lon, lat
     
     #total_rows = icbc_df.count()
     #print(f'Total rows: {total_rows}')
     #Total rows: 1360159
 
     
-    icbc_df.write.parquet("data/parquet/icbc", compression='LZ4', mode='overwrite')
+    #icbc_df.write.parquet("data/parquet/icbc", compression='LZ4', mode='overwrite')
     
     
     # Combine Street Name and municipality
@@ -132,7 +136,9 @@ def main(spark):
     #54340 NULL
     
 
-
+    icbc_df.write.parquet("data/parquet/icbc", compression='LZ4', mode='overwrite')
+    # Parquet data
+    #icbc_df.write.parquet("s3a://van-crash-data/icbc/processed-data/", compression='LZ4', mode='overwrite')
     
     
     
