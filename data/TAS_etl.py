@@ -282,7 +282,7 @@ def main(spark):
     # Regex to remove unwanted (non-ASCII) characters
     no_cf_df = no_cf_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
     no_city_df = no_city_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
-
+    entity_df = entity_df.withColumn("vehicle_model_year", F.regexp_replace(F.col("vehicle_model_year"), "[^\x00-\x7F]", ""))
 
     # Change column 'speed_zone' to 'speed_limit' and extract speed in Km/H
     no_cf_df = no_cf_df.withColumn('speed_limit_km_h', regexp_extract('speed_zone', r'(\d+)', 0)).drop('speed_zone')
@@ -357,21 +357,21 @@ def main(spark):
     
     '''
     
-    no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
+    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
+    
     
     # Write parquet files
-    try:
-        no_cf_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_cf", compression='LZ4', mode='overwrite')
-        no_city_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_city", compression='LZ4', mode='overwrite')
-        entity_df.write.parquet("s3a://van-crash-data/TAS/processed-data/entity", compression='LZ4', mode='overwrite')
-    except Exception as e:
-        print(f"Error writing to S3: {e}")
+    no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
+    no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
+    entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
     
-    # TODO
-    # Read parquet files
-    #no_cf_df_parquet = spark.read.parquet('data/parquet/TAS/no_city')
-    
-    #no_cf_df_parquet.show()
+    #try:
+    #    no_cf_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_cf", compression='LZ4', mode='overwrite')
+    #    no_city_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_city", compression='LZ4', mode='overwrite')
+    #    entity_df.write.parquet("s3a://van-crash-data/TAS/processed-data/entity", compression='LZ4', mode='overwrite')
+    #except Exception as e:
+    #    print(f"Error writing to S3: {e}")
+
 
 
 if __name__ == '__main__':  
