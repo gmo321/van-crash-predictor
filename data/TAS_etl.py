@@ -2,7 +2,7 @@ import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 
 from pyspark.sql import SparkSession, functions, types
-from pyspark.sql.types import StructField, StringType, StructType
+from pyspark.sql.types import *
 from pyspark.sql.functions import *
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
@@ -17,7 +17,7 @@ def main(spark):
     
     no_cf_df_schema = types.StructType([
         StructField("Municipality", StringType(), True),
-        StructField("Year", StringType(), True),
+        StructField("Year", IntegerType(), True),
         StructField("Accident Type", StringType(), True),
         StructField("Collision Type", StringType(), True),
         StructField("Crash Configuration", StringType(), True),
@@ -30,9 +30,9 @@ def main(spark):
         StructField("Region", StringType(), True),
         StructField("Road Condition", StringType(), True),
         StructField("Weather", StringType(), True),
-        StructField("Crash Count", StringType(), True),
-        StructField("Total Casualty", StringType(), True),
-        StructField("Total Vehicles Involved", StringType(), True),
+        StructField("Crash Count", IntegerType(), True),
+        StructField("Total Casualty", IntegerType(), True),
+        StructField("Total Vehicles Involved", IntegerType(), True),
         StructField("In Parking Lot", StringType(), True),
         StructField("Land Use", StringType(), True),
         StructField("Light", StringType(), True),
@@ -46,10 +46,11 @@ def main(spark):
         StructField("Traffic Control", StringType(), True),
         StructField("Traffic Flow", StringType(), True)
 ])
-  
+
+
     no_city_schema = types.StructType([
         StructField("Region", StringType(), True),
-        StructField("Year", StringType(), True),
+        StructField("Year", IntegerType(), True),
         StructField("Accident Type", StringType(), True),
         StructField("Alcohol Involved", StringType(), True),
         StructField("Collision Type", StringType(), True),
@@ -69,9 +70,9 @@ def main(spark):
         StructField("Road Condition", StringType(), True),
         StructField("Speed Involved", StringType(), True),
         StructField("Weather", StringType(), True),
-        StructField("Crash Count", StringType(), True),
-        StructField("Total Casualty", StringType(), True),
-        StructField("Total Vehicles Involved", StringType(), True),
+        StructField("Crash Count", IntegerType(), True),
+        StructField("Total Casualty", IntegerType(), True),
+        StructField("Total Vehicles Involved", IntegerType(), True),
         StructField("Communication Video Equipment", StringType(), True),
         StructField("Driver In Ext Distraction", StringType(), True),
         StructField("Driver Inattentive", StringType(), True),
@@ -93,7 +94,7 @@ def main(spark):
     
     entity_schema = types.StructType([
         StructField("Region", StringType(), True),
-        StructField("Year", StringType(), True),
+        StructField("Year", IntegerType(), True),
         StructField("Accident Type", StringType(), True),
         StructField("Age Range", StringType(), True),
         StructField("Contributing Factor 1", StringType(), True),
@@ -106,7 +107,7 @@ def main(spark):
         StructField("Month", StringType(), True),
         StructField("Vehicle Type", StringType(), True),
         StructField("Vehicle Use", StringType(), True),
-        StructField("Entity Count", StringType(), True),
+        StructField("Entity Count", IntegerType(), True),
         StructField("Collision Type", StringType(), True),
         StructField("Damage Location", StringType(), True),
         StructField("Damage Severity", StringType(), True),
@@ -116,7 +117,7 @@ def main(spark):
         StructField("Vehicle Body Style", StringType(), True),
         StructField("Vehicle Jurisdiction", StringType(), True),
         StructField("Vehicle Make", StringType(), True),
-        StructField("Vehicle Model Year", StringType(), True)
+        StructField("Vehicle Model Year", IntegerType(), True)
 ])
     
     
@@ -137,13 +138,9 @@ def main(spark):
                         .option("encoding", "UTF-16") \
                         .csv("s3a://van-crash-data/TAS/raw/TAS_entity.csv", schema=entity_schema).repartition(60)
                         
-                        
     #total_rows_1 = no_cf_df.count() 107020 
     #total_rows_2 = no_city_df.count() 106841
     #total_rows_3 = entity_df.count() 196395
-    #print(f'Total rows: {total_rows_1} \n',
-    #      f'Total rows: {total_rows_2} \n',
-    #      f'Total rows: {total_rows_3} \n')
 
     # Drop unneccessary columns
     no_cf_df = no_cf_df.drop('In Parking Lot', 
@@ -155,6 +152,7 @@ def main(spark):
                              'Impact With Animal',
                              'Pedestrian Activity',
                              'Road Character',
+                             'On Road',
                              'Road Class')
     
     no_city_df = no_city_df.drop('Impact With Animal',
@@ -168,10 +166,17 @@ def main(spark):
                                  'Road Character', 
                                  'Road Class', 
                                  'Crash Count',
+                                 'On Road',
+                                 'Driver In Ext Distraction',
+                                 'Driving Without Due Care',
                                  'Communication Video Equipment')
     
     entity_df = entity_df.drop('Driver License Jurisdiction', 
                                'Vehicle Jurisdiction', 
+                               'Age Range',
+                               'Gender',
+                               'Vehicle Make',
+                               'Vehicle Model Year',
                                "Entity Type", 
                                "Entity Count", 
                                "Travel Direction",
@@ -179,6 +184,8 @@ def main(spark):
                                'Contributing Factor 2', 
                                'Contributing Factor 3', 
                                'Contributing Factor 4',
+                               'Vehicle Type',
+                               'Vehicle Body Style',
                                'Vehicle Use')
     
     
@@ -188,14 +195,11 @@ def main(spark):
     #entity_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in entity_df.columns]).show() # Collision Type - 88
     
     #no_city_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_city_df.columns]).show()
+    
     # Drop null rows
-
-
     no_cf_df = no_cf_df.dropna()
     no_city_df = no_city_df.dropna()
     entity_df = entity_df.dropna()
-    
-    #no_city_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_city_df.columns]).show()
     
     # Renaming columns for consistency    
     no_cf_df = no_cf_df.withColumnsRenamed({'Municipality': 'municipality', 
@@ -261,13 +265,11 @@ def main(spark):
     entity_df = entity_df.withColumnsRenamed({'Region': 'region',
                                             'Year': 'year',
                                             'Accident Type': 'accident_type',
-                                            'Age Range': 'age_range',
                                             'Contributing Factor 1': 'contributing_factor_1',
                                             'Contributing Factor 2': 'contributing_factor_2',
                                             'Contributing Factor 3': 'contributing_factor_3',
                                             'Contributing Factor 4': 'contributing_factor_4',
                                             'Crash Configuration': 'crash_configuration',
-                                            'Gender': 'gender',
                                             'Month': 'month',
                                             'Vehicle Type': 'vehicle_type',
                                             'Vehicle Use': 'vehicle_use',
@@ -275,15 +277,12 @@ def main(spark):
                                             'Damage Location': 'damage_location',
                                             'Damage Severity': 'damage_severity',
                                             'Pre Action': 'pre_action',
-                                            'Vehicle Make': 'vehicle_make',
-                                            'Vehicle Body Style': 'vehicle_body_style',
-                                            'Vehicle Model Year': 'vehicle_model_year'})
+                                            'Vehicle Body Style': 'vehicle_body_style'})
     
     # Regex to remove unwanted (non-ASCII) characters
     no_cf_df = no_cf_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
     no_city_df = no_city_df.withColumn("traffic_flow", F.regexp_replace(F.col("traffic_flow"), "[^\x00-\x7F]", ""))
-    entity_df = entity_df.withColumn("vehicle_model_year", F.regexp_replace(F.col("vehicle_model_year"), "[^\x00-\x7F]", ""))
-
+    
     # Change column 'speed_zone' to 'speed_limit' and extract speed in Km/H
     no_cf_df = no_cf_df.withColumn('speed_limit_km_h', regexp_extract('speed_zone', r'(\d+)', 0)).drop('speed_zone')
     no_city_df = no_city_df.withColumn('speed_limit_km_h', regexp_extract('speed_zone', r'(\d+)', 0)).drop('speed_zone')
@@ -295,71 +294,6 @@ def main(spark):
     # Check the distribution of data by municipality
     #no_cf_df.groupBy("municipality").count().orderBy("count", ascending=False).show()
 
-    # Check the number of partitions
-    #print(no_cf_df.rdd.getNumPartitions()) #60
-
-    # Repartition the DataFrame if necessary
-    #no_cf_df = no_cf_df.repartition(200)
-    
-    # Data Imputation of speed_limit_km_h with mode
-    '''
-    imputer = Imputer(
-        inputCols=['speed_limit_km_h'],
-        outputCols=['speed_limit_km_h'],
-        strategy='mode'
-    )
-    
-    model = imputer.fit(no_cf_df)
-    model = imputer.fit(no_city_df)
-    
-    no_cf_df = model.transform(no_cf_df)
-    no_city_df = model.transform(no_city_df)
-    '''
-    
-    
-    
-    
-    '''
-    # Repartition the DataFrame by municipality
-    no_cf_df = no_cf_df.repartition("municipality")
-    
-    # Add a salt column to spread out skewed data
-    no_cf_df = no_cf_df.withColumn("salt", (F.col("municipality").cast("string") + F.lit("_") + (F.rand() * 10).cast("int").cast("string")))
-
-    # Group by municipality and salt to calculate the mode speed limit
-    mode_speed_df = no_cf_df.groupBy('municipality', 'salt', 'speed_limit_km_h') \
-        .agg(F.count('*').alias('count')) \
-        .withColumnRenamed("speed_limit_km_h", "mode_speed_limit")
-
-    # Use a window function to get the most frequent speed limit per municipality and salt
-    window_spec = Window.partitionBy("municipality", "salt").orderBy(F.col("count").desc())
-    mode_speed_df = mode_speed_df.withColumn("rank", F.row_number().over(window_spec)) \
-        .filter(F.col("rank") == 1) \
-        .drop("count", "rank", "salt")
-
-    # Broadcast the mode_speed_df if it is small enough
-    mode_speed_df = mode_speed_df.cache()
-    if mode_speed_df.count() < 100000:  # Adjust threshold based on cluster memory
-        mode_speed_df = F.broadcast(mode_speed_df)
-
-    # Perform a join to fill nulls with the most common speed limit for each municipality
-    no_cf_df = no_cf_df.join(mode_speed_df, ['municipality'], 'left') \
-        .withColumn('speed_limit_km_h', F.when(F.col('speed_limit_km_h').isNull(), F.col('mode_speed_limit')).otherwise(F.col('speed_limit_km_h'))) \
-        .drop('mode_speed_limit')
-    
-        
-    # Show a sample of the result set
-    #no_cf_df.limit(100).show()  # Show only the first 100 rows
-
-    # Alternatively, write the output to storage
-    #no_cf_df.write.csv("/Users/gloriamo/Desktop/van-crash-predictor/data")
-    
-    
-    '''
-    
-    #no_cf_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in no_cf_df.columns]).show()
-    
-    
     # Write parquet files
     no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
     no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')

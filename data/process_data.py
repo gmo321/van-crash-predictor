@@ -30,6 +30,8 @@ def main(spark):
     
     ### CLEAN TAS DATA SETS ###
     
+
+    
     # Remove municipalities with value "UNKNOWN"
     no_cf_df = no_cf_df.filter(~col("municipality").contains("UNKNOWN"))
     
@@ -73,14 +75,35 @@ def main(spark):
     no_cf_df = model.transform(no_cf_df)
     
 
+    
     ### CLEAN ICBC DATASET ###
     
-    #TODO: Geocode lon, lat values
+    # TODO: Geocode lon, lat values
+    # Comment this code to see null lon, lat values
     icbc_df = icbc_df.dropna()
+    
+    # Rename columns for consistency
+    icbc_df = icbc_df.withColumnsRenamed({'pedestrian_flag':'pedestrian_involved', 
+                                          'total_victims': 'total_casualty'})
+    
+    # Cast column types
+    icbc_df = icbc_df.withColumn('is_intersection_crash', col('is_intersection_crash').cast(BooleanType())) \
+        .withColumn('pedestrian_involved', col('pedestrian_involved').cast(BooleanType()))
     
     # Remove municipalities with value "UNKNOWN"
     icbc_df = icbc_df.filter(~col("municipality").contains("UNKNOWN"))
     
+    # Convert string columns to lowercase for consistency
+    icbc_df = icbc_df.withColumn('crash_severity', lower('crash_severity')) \
+                    .withColumn('day', lower('day')) \
+                    .withColumn('crash_configuration', lower('crash_configuration')) \
+                    .withColumn('month', lower('month')) \
+                    .withColumn('region', lower('region')) \
+                    .withColumn('street', lower('street')) \
+                    .withColumn('municipality', lower('municipality')) \
+                    .withColumn('cross_street', lower('cross_street')) \
+                    .withColumn('city', lower('city'))
+        
     #icbc_df.groupBy('municipality').agg(sum(when(col('longitude').isNull(), 1))).alias('null_longitude_count').show()
         
     #icbc_df.groupBy('municipality').agg(count('*').alias('count')).orderBy(col('count').desc()).show(truncate=False)
@@ -90,6 +113,7 @@ def main(spark):
     #icbc_df.select([F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in icbc_df.columns]).show()
     # Lon, Lat 264503 nulls
     # cross_street 736558 nulls
+
     
     
     ### MERGE DATASETS ###
@@ -116,9 +140,7 @@ def main(spark):
                                               ],
                               how='inner')
     
-    # Rename columns for consistency
-    icbc_df = icbc_df.withColumnsRenamed({'pedestrian_flag':'pedestrian_involved', 
-                                          'total_victims': 'total_casualty'})
+    \
 
     merged_df2 = merged_df1.join(entity_df, on=["region", 
                                               "year", 
@@ -130,24 +152,123 @@ def main(spark):
     
     
     merged_df2 = merged_df2.withColumn('year', col('year').cast(IntegerType())) \
-        .withColumn('total_casualty', col('total_casualty').cast(IntegerType()))
+        .withColumn('pedestrian_involved', col('pedestrian_involved').cast(BooleanType())) \
+        .withColumn('total_casualty', col('total_casualty').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
+        .withColumn('total_vehicles_involved', col('total_vehicles_involved').cast(IntegerType())) \
         
     
-    icbc_df = icbc_df.withColumn('month', lower('month'))
+    # TODO 
+    # Cast proper types
+    # Merge on similar columns
+    '''
+    root
+    |-- region: string (nullable = true)
+    |-- year: integer (nullable = true)
+    |-- month: string (nullable = true)
+    |-- accident_type: string (nullable = true)
+    |-- collision_type: string (nullable = true)
+    |-- crash_configuration: string (nullable = true)
+    |-- light: string (nullable = true)
+    |-- on_road: string (nullable = true)
+    |-- pedestrian_involved: string (nullable = true)
+    |-- road_condition: string (nullable = true)
+    |-- weather: string (nullable = true)
+    |-- road_surface: string (nullable = true)
+    |-- speed_limit_km_h: integer (nullable = true)
+    |-- speed_advisory: string (nullable = true)
+    |-- traffic_control: string (nullable = true)
+    |-- traffic_flow: string (nullable = true)
+    |-- total_casualty: integer (nullable = true)
+    |-- total_vehicles_involved: string (nullable = true)
+    |-- municipality: string (nullable = true)
+    |-- alcohol_involved: string (nullable = true)
+    |-- distraction_involved: string (nullable = true)
+    |-- driving_too_fast: string (nullable = true)
+    |-- drug_involved: string (nullable = true)
+    |-- exceeding_speed: string (nullable = true)
+    |-- excessive_speed: string (nullable = true)
+    |-- fell_asleep: string (nullable = true)
+    |-- impaired_involved: string (nullable = true)
+    |-- speed_involved: string (nullable = true)
+    |-- driver_in_ext_distraction: string (nullable = true)
+    |-- driver_inattentive: string (nullable = true)
+    |-- driving_without_due_care: string (nullable = true)
+    |-- age_range: string (nullable = true)
+    |-- gender: string (nullable = true)
+    |-- vehicle_type: string (nullable = true)
+    |-- damage_location: string (nullable = true)
+    |-- damage_severity: string (nullable = true)
+    |-- pre_action: string (nullable = true)
+    |-- vehicle_body_style: string (nullable = true)
+    |-- vehicle_make: string (nullable = true)
+    |-- vehicle_model_year: string (nullable = true)
+
+    root
+    |-- year: integer (nullable = true)
+    |-- crash_severity: string (nullable = true)
+    |-- day: string (nullable = true)
+    |-- crash_configuration: string (nullable = true)
+    |-- is_intersection_crash: string (nullable = true)
+    |-- month: string (nullable = true)
+    |-- pedestrian_involved: string (nullable = true)
+    |-- region: string (nullable = true)
+    |-- street: string (nullable = true)
+    |-- time: string (nullable = true)
+    |-- municipality: string (nullable = true)
+    |-- total_crashes: integer (nullable = true)
+    |-- total_casualty: integer (nullable = true)
+    |-- latitude: double (nullable = true)
+    |-- cross_street: string (nullable = true)
+    |-- longitude: double (nullable = true)
+    |-- city: string (nullable = true)
+    '''
+    
+                        
+
+        
     merged_df2 = merged_df2.withColumn('month', lower('month'))
 
+    merged_df2 = merged_df2.withColumn('accident_type', lower('accident_type'))   
+    
+    #icbc_df.select('crash_severity').show()
+    #merged_df2.select('accident_type').show()
     
     # Rename columns in merged_df2 to avoid duplicated columns after join
-    merged_df2 = merged_df2.withColumnRenamed('region', 'region_df2') \
-        .withColumnRenamed('crash_configuration', 'crash_configuration_df2') \
-        .withColumnRenamed('pedestrian_involved', 'pedestrian_involved_df2') \
-        .withColumnRenamed('total_casualty', 'total_casualty_df2')
+    #merged_df2 = merged_df2.withColumnRenamed('region', 'region_df2') \
+    #    .withColumnRenamed('crash_configuration', 'crash_configuration_df2') \
+    #    .withColumnRenamed('pedestrian_involved', 'pedestrian_involved_df2') \
+    #    .withColumnRenamed('total_casualty', 'total_casualty_df2') \
+    #    .withColumnRenamed('accident_type', 'crash_severity')
+            
+        
+    #merged_df2.select('region').show()
+    #icbc_df.select('region').show()
+    
+    #print(merged_df2.columns)
+    #['region_df2', 'year', 'month', 'crash_severity', 'collision_type', 'crash_configuration_df2', 'light', 'on_road', 'pedestrian_involved_df2', 'road_condition', 
+    # 'weather', 'road_surface', 'speed_limit_km_h', 'speed_advisory', 'traffic_control', 'traffic_flow', 'total_casualty_df2', 'total_vehicles_involved', 'municipality', 
+    # 'alcohol_involved', 'distraction_involved', 'driving_too_fast', 'drug_involved', 'exceeding_speed', 'excessive_speed', 'fell_asleep', 'impaired_involved', 'speed_involved', 
+    # 'driver_in_ext_distraction', 'driver_inattentive', 'driving_without_due_care', 'age_range', 'gender', 'vehicle_type', 'damage_location', 'damage_severity', 'pre_action', 
+    # 'vehicle_body_style', 'vehicle_make', 'vehicle_model_year']
+    #print(icbc_df.columns)
+    #['year', 'crash_severity', 'day', 'crash_configuration', 'is_intersection_crash', 'month', 'pedestrian_involved', 'region', 'street', 'time', 'municipality', 'total_crashes', 
+    # 'total_casualty', 'latitude', 'cross_street', 'longitude', 'city']
     
     # Merge icbc_df with merged_df2 (TAS datasets)
     merged_all_df = icbc_df.join(merged_df2, on=["municipality",
                                                   "year",
-                                                  "month"],
+                                                  "month",
+                                                  
+                                                  "crash_severity"],
                                   how='inner')
+    
+    merged_all_df.show(3, truncate=False)
     
     # Drop duplicate columns
     merged_all_df = merged_all_df.drop('region_df2', 'crash_configuration_df2', 'pedestrian_involved_df2', 'total_casualty_df2')
