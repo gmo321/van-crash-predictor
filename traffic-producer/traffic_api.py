@@ -44,6 +44,7 @@ def fetch_traffic_data(point):
         response = requests.get(url, params=params)
         
         response.raise_for_status()
+        
         data = response.json()
             
         segment_data = data.get("flowSegmentData", {})
@@ -55,7 +56,8 @@ def fetch_traffic_data(point):
             "current_travel_time": segment_data.get("currentTravelTime", "N/A"),
             "free_flow_travel_time": segment_data.get("freeFlowTravelTime", "N/A"),
             "confidence": segment_data.get("confidence", "N/A"),
-            "road_closure": segment_data.get("roadClosure", "N/A")
+            "road_closure": segment_data.get("roadClosure", "N/A"),
+            "date": response.headers.get("Date", "N/A")
         }
     except requests.exceptions.RequestException as e:
         logging.error(f"Error fetching traffic data for {point}: {e}")
