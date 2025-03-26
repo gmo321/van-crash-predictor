@@ -3,6 +3,7 @@ from confluent_kafka import Producer
 import json
 import logging
 import time
+from openweather_api import get_cities
 from openweather_api import fetch_api_data
 
 logging.basicConfig(level=logging.DEBUG)
@@ -23,7 +24,7 @@ def send_to_kafka(topic, data):
     producer = Producer(config)
     
     # Sends message to topic
-    key = 'Vancouver'
+    key = 'weather'
     value = json.dumps(data)
     
     try:
@@ -35,6 +36,7 @@ def send_to_kafka(topic, data):
     
 def poll_and_send_data(interval=30):
     while True:
+        get_cities()
         data = fetch_api_data()
         if data:
             send_to_kafka('weather-data', data)
