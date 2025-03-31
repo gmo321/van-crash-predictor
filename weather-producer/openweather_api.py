@@ -59,20 +59,32 @@ def fetch_api_data():
             date = response_json.get('dt', {})
             name = response_json.get('name', {})
             
-            results = {'name': name, 'latitude': lat, 'longitude': lon, 'date': date, 'weather': weather_main, 'weather_description': weather_description, 'temp': temp,
-                            'visibility': visibility, 'clouds': clouds, 'rain': rain, 'snow': snow}
+            results = {'name': name, 
+                       'latitude': lat, 
+                       'longitude': lon, 
+                       'date': date, 
+                       'weather': weather_main, 
+                       'weather_description': weather_description, 
+                       'temp': temp,
+                       'visibility': visibility, 
+                       'clouds': clouds, 
+                       'rain': rain, 
+                       'snow': snow}
             
             weather.append(results)
-            
 
         except requests.exceptions.RequestException as e:
             logging.error(f"Error fetching weather data: {e}")
             return None
         
-    print(weather)
-        
     with open("weather_data.json", "w") as file:
             json.dump(weather, file, indent=4)
+     
+    json_output = json.dumps(weather, indent=4)    
+    
+    return json_output
+        
+    
     
     # TODO update Spark Streaming Consumer
 

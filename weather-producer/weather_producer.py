@@ -17,35 +17,48 @@ def delivery_report(err, msg):
     
 def send_to_kafka(topic, data):
     config = {
-    'bootstrap.servers': 'kafka:9092'
+        'bootstrap.servers': 'kafka:9092'
     }
     
     # Create Producer instance
     producer = Producer(config)
     
     # Sends message to topic
-    key = 'weather'
-    value = json.dumps(data)
-    
-    try:
-        producer.produce(topic, key=key, value=value, callback=delivery_report)
-        producer.flush()
-    except Exception as e:
-        logging.error(f"Error sending to Kafka: {e}")
+    #key = 'weather'
+
+    if isinstance(data, list):
+        for record in data:
+            if isinstance(record, dict):
+                municipality = record.get('name', 'unknown')
+            #value = json.dumps(record)
+                producer.produce(topic, key=municipality, value=json.dumps(record), callback=delivery_report)
+            else:
+                logging.warning(f"Received non-dict record: {record}")
+    elif isinstance(data, dict):
+        municipality = data.get('name', 'unknown')  # Fallback in case 'name' is missing
+        #value = json.dumps(data)
+        producer.produce(topic, key=municipality, value=json.dumps(data), callback=delivery_report)
+        
+    # Flush after sending all records
+    producer.flush()
+
         
     
 def poll_and_send_data(interval=30):
     while True:
         get_cities()
         data = fetch_api_data()
-        if data:
-            send_to_kafka('weather-data', data)
+        if not data:
+            logging.warning("No data received from the API.")
+            continue
+        
+        send_to_kafka('weather-data', data)
         time.sleep(interval)
 
 def main():
     logging.info("Starting data polling process.")
     try:
-        poll_and_send_data(interval=10)  
+        poll_and_send_data(interval=30)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:
