@@ -276,11 +276,14 @@ def main(spark):
     
     #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
 
-    municipalities = merged_all_df.select("municipality").distinct().collect()
+    #municipalities = merged_all_df.select("municipality").distinct().collect()
     
-    municipalities_list = [row["municipality"] for row in municipalities]
-    print(municipalities_list)
+    #municipalities_list = [row["municipality"] for row in municipalities]
+    #print(municipalities_list)
 
+    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
+    
+    
 
 
 
