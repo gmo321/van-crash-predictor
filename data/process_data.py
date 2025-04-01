@@ -289,6 +289,9 @@ def main(spark):
                                                  (col("damage_severity") == "moderate"), "moderate"
                                              ).otherwise("unknown"))
     
+    
+    
+    
     #merged_all_df.select("crash_severity", "damage_severity", "total_crashes", "total_casualty").show()
     
 
