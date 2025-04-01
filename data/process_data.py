@@ -10,7 +10,7 @@ from pyspark.sql.functions import row_number
 from pyspark.sql.functions import col, count, first
 from pyspark.ml.feature import Imputer
 from pyspark.sql.types import IntegerType, BooleanType, DateType
-from pyspark.sql.functions import when, col
+from pyspark.sql.functions import when, col, avg
 
 
 
@@ -214,13 +214,13 @@ def main(spark):
     
     # Create columnn "day_numeric" to convert "day" column to numerical format (e.g Monday = 0, Tuesday = 2, etc.)
     merged_all_df = merged_all_df.withColumn('day_numeric',
-                                             F.when(col('day') == 'MONDAY', 0)
-                                             .when(col('day') == 'TUESDAY', 1)
-                                             .when(col('day') == 'WEDNESDAY', 2)
-                                             .when(col('day') == 'THURSDAY', 3)
-                                             .when(col('day') == 'FRIDAY', 4)
-                                             .when(col('day') == 'SATURDAY', 5)
-                                             .when(col('day') == 'SUNDAY', 6)
+                                             F.when(col('day') == 'monday', 0)
+                                             .when(col('day') == 'tuesday', 1)
+                                             .when(col('day') == 'wednesday', 2)
+                                             .when(col('day') == 'thursday', 3)
+                                             .when(col('day') == 'friday', 4)
+                                             .when(col('day') == 'saturday', 5)
+                                             .when(col('day') == 'sunday', 6)
                                              .cast(IntegerType()))
     
     
@@ -230,7 +230,7 @@ def main(spark):
                                         
     # Create column "month_numeric" to convert "month" column to numeric format (e.g January = 1, February = 2, etc.)
     merged_all_df = merged_all_df.withColumn('month_numeric',
-                                             F.when(col('month') == 'janurary', 1)
+                                             F.when(col('month') == 'january', 1)
                                              .when(col('month') == 'february', 2)
                                              .when(col('month') == 'march', 3)
                                              .when(col('month') == 'april', 4)
@@ -292,9 +292,29 @@ def main(spark):
     
     
     
-    #merged_all_df.select("crash_severity", "damage_severity", "total_crashes", "total_casualty").show()
+    #merged_all_df.select("day", "month", "day_numeric", "is_weekend", "month_numeric", "time_period", "season", "crash_severity").show()
     
-    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
+    grouped_lat_lon_df = merged_all_df.groupBy("latitude", 'longitude').agg(count('*').alias('count')).orderBy(col('count').desc())
+    
+    mean_count = grouped_lat_lon_df.agg(avg('count').alias('mean_count')).collect()[0][0]
+    
+    print(mean_count) #6293.540995193667
+    
+    hotspot_df = grouped_lat_lon_df.withColumn(
+        "hotspot_level",
+        when(col("count") >= 2 * mean_count, "High")
+        .when(col("count") >= mean_count, "Moderate")
+        .otherwise("Low")
+    )
+    
+    hotspot_df.groupBy("hotspot_level").count().show()
+
+    #hotspot_df.show(truncate=False)
+    #mean_count.show()
+    
+    
+    #merged_all_df.show(20, truncate=False)
+    #merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
     
 
 if __name__ == '__main__':  
