@@ -9,18 +9,18 @@
             "free_flow_travel_time": 51,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 01:18:45 GMT"
+            "date": "Mon, 24 Mar 2025 22:37:45 GMT"
         },
         {
             "latitude": 49.26,
             "longitude": -123.1135,
-            "current_speed": 32,
-            "free_flow_speed": 40,
-            "current_travel_time": 113,
-            "free_flow_travel_time": 90,
+            "current_speed": 33,
+            "free_flow_speed": 38,
+            "current_travel_time": 109,
+            "free_flow_travel_time": 95,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 01:18:45 GMT"
+            "date": "Mon, 24 Mar 2025 22:37:45 GMT"
         },
         {
             "latitude": 49.28,
@@ -31,7 +31,7 @@
             "free_flow_travel_time": 96,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 01:18:45 GMT"
+            "date": "Mon, 24 Mar 2025 22:37:45 GMT"
         },
         {
             "latitude": 49.2767,
@@ -42,29 +42,29 @@
             "free_flow_travel_time": 98,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 01:18:45 GMT"
+            "date": "Mon, 24 Mar 2025 22:37:45 GMT"
         },
         {
             "latitude": 49.269,
             "longitude": -123.1122,
-            "current_speed": 22,
+            "current_speed": 24,
             "free_flow_speed": 36,
-            "current_travel_time": 87,
+            "current_travel_time": 79,
             "free_flow_travel_time": 53,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 01:18:45 GMT"
+            "date": "Mon, 24 Mar 2025 22:37:45 GMT"
         },
         {
             "latitude": 49.2895,
             "longitude": -123.115,
-            "current_speed": 12,
+            "current_speed": 13,
             "free_flow_speed": 18,
-            "current_travel_time": 60,
+            "current_travel_time": 56,
             "free_flow_travel_time": 40,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 01:18:46 GMT"
+            "date": "Mon, 24 Mar 2025 22:37:45 GMT"
         }
     ]
 }
