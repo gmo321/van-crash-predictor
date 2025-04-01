@@ -10,6 +10,7 @@ from pyspark.sql.functions import row_number
 from pyspark.sql.functions import col, count, first
 from pyspark.ml.feature import Imputer
 from pyspark.sql.types import IntegerType, BooleanType, DateType
+from pyspark.sql.functions import when, col
 
 
 
@@ -185,6 +186,10 @@ def main(spark):
                                                   "crash_severity"],
                                   how='inner')
     
+    
+    # Drop unneeded columns
+    merged_all_df = merged_all_df.drop('crash_severity', 'crash_configuration', 'collision_type', 'damage_location', 'pedestrian_involved')
+    
     #merged_all_df.show()
     
     #['municipality', 'year', 'month', 'region', 'crash_configuration', 'total_casualty', 'pedestrian_involved', 'crash_severity', 'day', 'is_intersection_crash', 'street', 
@@ -265,31 +270,30 @@ def main(spark):
     
     #merged_all_df.select('time', 'time_period', 'day', 'day_numeric', 'is_weekend', 'month', 'month_numeric', 'season').show()
     
-    #merged_all_df.select('crash_severity', 'crash_configuration', 'total_crashes', 'total_casualty', 'accident_type', 'collision_type', 'damage_severity').show(truncate=False)
     
- 
-    #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
+    # Create column "crash_severity"
+    # crash_severity: minor, moderate, severe
+    merged_all_df = merged_all_df.withColumn("crash_severity",
+                                             when(
+                                                 (col("total_casualty") >= 3) |
+                                                 (col("total_crashes") >= 3) |
+                                                 (col("damage_severity").isin(["demolished(repair impractical)", "severe"])) | 
+                                                 (col("total_vehicles_involved") >= 3), "severe"
+                                             ).when(
+                                                 (col("total_casualty") == 0) | (col("total_casualty") == 1) |
+                                                 (col("total_crashes") == 1) &
+                                                 (col("damage_severity").isin(["minor", "no damage (none visible)"])), "minor"
+                                             ).when(
+                                                 col("total_casualty").between(1, 2) |
+                                                 col("total_crashes").between(1, 2) &
+                                                 (col("damage_severity") == "moderate"), "moderate"
+                                             ).otherwise("unknown"))
     
-    #print(merged_all_df.count()) #89041018 
-
-    #merged_all_df.dropDuplicates()
-    
-    #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
-
-    #municipalities = merged_all_df.select("municipality").distinct().collect()
-    
-    #municipalities_list = [row["municipality"] for row in municipalities]
-    #print(municipalities_list)
-
-    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
-    
-    
-
-
-
+    #merged_all_df.select("crash_severity", "damage_severity", "total_crashes", "total_casualty").show()
     
 
 if __name__ == '__main__':  
+    
     spark = SparkSession.builder \
         .appName('Data Processing') \
         .config("spark.driver.memory", "4g") \
