@@ -1,0 +1,37 @@
+[
+    {
+        "city": "Coquitlam",
+        "latitude": 49.2842958,
+        "longitude": -122.793281,
+        "country": "CA",
+        "state": "British Columbia"
+    },
+    {
+        "city": "Hope",
+        "latitude": 49.3799438,
+        "longitude": -121.441351,
+        "country": "CA",
+        "state": "British Columbia"
+    },
+    {
+        "city": "Port Coquitlam",
+        "latitude": 49.2621643,
+        "longitude": -122.780542,
+        "country": "CA",
+        "state": "British Columbia"
+    },
+    {
+        "city": "Revelstoke",
+        "latitude": 50.998045,
+        "longitude": -118.1956709,
+        "country": "CA",
+        "state": "British Columbia"
+    },
+    {
+        "city": "Chilliwack",
+        "latitude": 49.157677,
+        "longitude": -121.95143,
+        "country": "CA",
+        "state": "British Columbia"
+    }
+]

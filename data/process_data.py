@@ -185,7 +185,7 @@ def main(spark):
                                                   "crash_severity"],
                                   how='inner')
     
-    merged_all_df.show()
+    #merged_all_df.show()
     
     #['municipality', 'year', 'month', 'region', 'crash_configuration', 'total_casualty', 'pedestrian_involved', 'crash_severity', 'day', 'is_intersection_crash', 'street', 
     # 'time', 'total_crashes', 'latitude', 'cross_street', 'longitude', 'city', 'collision_type', 'light', 'road_condition', 'weather', 'road_surface', 'speed_limit_km_h', 
@@ -268,7 +268,22 @@ def main(spark):
     #merged_all_df.select('crash_severity', 'crash_configuration', 'total_crashes', 'total_casualty', 'accident_type', 'collision_type', 'damage_severity').show(truncate=False)
     
  
+    #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
     
+    #print(merged_all_df.count()) #89041018 
+
+    #merged_all_df.dropDuplicates()
+    
+    #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
+
+    municipalities = merged_all_df.select("municipality").distinct().collect()
+    
+    municipalities_list = [row["municipality"] for row in municipalities]
+    print(municipalities_list)
+
+
+
+
     
 
 if __name__ == '__main__':  
