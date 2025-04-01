@@ -7,8 +7,54 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+weather_data_sample = [
+    {
+        "name": "Port Coquitlam",
+        "latitude": 49.2839,
+        "longitude": -122.7933,
+        "date": 1742970107,
+        "weather": "Clouds",
+        "weather_description": "overcast clouds",
+        "temp": 11.47,
+        "visibility": 10000,
+        "clouds": 100,
+        "rain": 0,
+        "snow": 0
+    },
+    {
+        "name": "Hope",
+        "latitude": 49.3797,
+        "longitude": -121.4414,
+        "date": 1742970107,
+        "weather": "Clear",
+        "weather_description": "clear sky",
+        "temp": 10.96,
+        "visibility": 10000,
+        "clouds": 0,
+        "rain": 0,
+        "snow": 0
+    },
+    {
+        "name": "Port Coquitlam",
+        "latitude": 49.2617,
+        "longitude": -122.7803,
+        "date": 1742970107,
+        "weather": "Clouds",
+        "weather_description": "overcast clouds",
+        "temp": 10.86,
+        "visibility": 10000,
+        "clouds": 100,
+        "rain": 0,
+        "snow": 0
+    }
+]
+
 def get_cities():
-    csv_path = os.path.join(os.getcwd(), "city_list.csv")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    
+    CITY_LIST_PATH = os.path.join(BASE_DIR, "city_list.csv")
+    
+    csv_path = os.path.join(os.getcwd(), CITY_LIST_PATH)
     
     df = pd.read_csv(csv_path)
     df.rename(columns={'fullAddress': 'city', 'Y': 'latitude', 'X': 'longitude', }, inplace=True)
@@ -26,11 +72,11 @@ def get_cities():
 def fetch_api_data():
     url = 'https://api.openweathermap.org/data/2.5/weather'    
     unit = 'metric'
-
-    lats, lons = get_cities()
     
     weather = []
     
+    lats, lons = get_cities()
+
     for lat, lon in zip(lats, lons):
 
         params = {
@@ -43,6 +89,7 @@ def fetch_api_data():
         try:
             response = requests.get(url, params=params)
             response.raise_for_status()
+            
             response_json = response.json()
             
             lon = response_json.get('coord', {}).get('lon', 0)
@@ -60,39 +107,34 @@ def fetch_api_data():
             name = response_json.get('name', {})
             
             results = {'name': name, 
-                       'latitude': lat, 
-                       'longitude': lon, 
-                       'date': date, 
-                       'weather': weather_main, 
-                       'weather_description': weather_description, 
-                       'temp': temp,
-                       'visibility': visibility, 
-                       'clouds': clouds, 
-                       'rain': rain, 
-                       'snow': snow}
+                    'latitude': lat, 
+                    'longitude': lon, 
+                    'date': date, 
+                    'weather': weather_main, 
+                    'weather_description': weather_description, 
+                    'temp': temp,
+                    'visibility': visibility, 
+                    'clouds': clouds, 
+                    'rain': rain, 
+                    'snow': snow}
             
             weather.append(results)
 
         except requests.exceptions.RequestException as e:
             logging.error(f"Error fetching weather data: {e}")
-            return None
-        
+            continue
+            
     with open("weather_data.json", "w") as file:
             json.dump(weather, file, indent=4)
-     
-    json_output = json.dumps(weather, indent=4)    
     
-    return json_output
+    return weather
         
     
-    
-    # TODO update Spark Streaming Consumer
+
 
 def main():
-    get_cities()
     fetch_api_data()
     
     
 if __name__ == '__main__':
     main()
-    
