@@ -291,6 +291,8 @@ def main(spark):
     
     #merged_all_df.select("crash_severity", "damage_severity", "total_crashes", "total_casualty").show()
     
+    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
+    
 
 if __name__ == '__main__':  
     
