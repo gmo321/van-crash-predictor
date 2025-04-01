@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG)
 # Kafka configuration
 KAFKA_TOPIC = "weather-data"
 KAFKA_SERVER = "kafka:9092"
-#KAFKA_SERVER = "localhost:9092"   
+
 
 def delivery_report(err, msg):
     if err is not None:
@@ -53,7 +53,7 @@ def poll_and_send_data(producer, interval=30):
         try:
             data = fetch_api_data()
             
-            logging.debug(f"Fetched data: {data}")  # Log API data
+            #logging.debug(f"Fetched data: {data}")  # Log API data
             
             if not data:
                 logging.warning("No data received from the API.")
