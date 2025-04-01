@@ -294,27 +294,27 @@ def main(spark):
     
     #merged_all_df.select("day", "month", "day_numeric", "is_weekend", "month_numeric", "time_period", "season", "crash_severity").show()
     
-    grouped_lat_lon_df = merged_all_df.groupBy("latitude", 'longitude').agg(count('*').alias('count')).orderBy(col('count').desc())
+    #grouped_lat_lon_df = merged_all_df.groupBy("latitude", 'longitude').agg(count('*').alias('count')).orderBy(col('count').desc())
     
-    mean_count = grouped_lat_lon_df.agg(avg('count').alias('mean_count')).collect()[0][0]
+    #mean_count = grouped_lat_lon_df.agg(avg('count').alias('mean_count')).collect()[0][0]
     
-    print(mean_count) #6293.540995193667
+    #print(mean_count) #6293.540995193667
     
-    hotspot_df = grouped_lat_lon_df.withColumn(
-        "hotspot_level",
-        when(col("count") >= 2 * mean_count, "High")
-        .when(col("count") >= mean_count, "Moderate")
-        .otherwise("Low")
-    )
+    #hotspot_df = grouped_lat_lon_df.withColumn(
+    #    "hotspot_level",
+    #    when(col("count") >= 2 * mean_count, "High")
+    #    .when(col("count") >= mean_count, "Moderate")
+    #    .otherwise("Low")
+    #)
     
-    hotspot_df.groupBy("hotspot_level").count().show()
+    #hotspot_df.groupBy("hotspot_level").count().show()
 
     #hotspot_df.show(truncate=False)
     #mean_count.show()
     
     
     #merged_all_df.show(20, truncate=False)
-    #merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
+    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
     
 
 if __name__ == '__main__':  
