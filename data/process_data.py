@@ -265,7 +265,7 @@ def main(spark):
     
     #merged_all_df.select('time', 'time_period', 'day', 'day_numeric', 'is_weekend', 'month', 'month_numeric', 'season').show()
     
-    #merged_all_df.select('crash_severity', 'crash_configuration', 'total_crashes', 'total_casualty', 'accident_type', 'collision_type', 'damage_severity').show(truncate=False)
+    #merged_all_df.groupBy('region').agg(count("*").alias('count')).show(truncate=False)
     
  
     #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
@@ -282,7 +282,7 @@ def main(spark):
     #print(municipalities_list)
     
     # Parquet merged data
-    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
+    #merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
 
 
 

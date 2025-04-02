@@ -62,6 +62,8 @@ services:
     environment:
       - 'KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}'
       - 'TRAFFIC_API_KEY=${TRAFFIC_API_KEY}'
+      - 'KAFKA_MESSAGE_MAX_BYTES=200000000'
+      - 'KAFKA_REPLICA_FETCH_MAX_BYTES=200000000'
     volumes:
       - './traffic-producer:/app'
     ports:

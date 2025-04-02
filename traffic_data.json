@@ -9,7 +9,7 @@
             "free_flow_travel_time": 51,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 04:09:23 GMT"
+            "date": "Wed, 02 Apr 2025 05:01:03 GMT"
         },
         {
             "latitude": 49.26,
@@ -20,7 +20,7 @@
             "free_flow_travel_time": 90,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 04:09:23 GMT"
+            "date": "Wed, 02 Apr 2025 05:01:03 GMT"
         },
         {
             "latitude": 49.28,
@@ -31,7 +31,7 @@
             "free_flow_travel_time": 96,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 04:09:23 GMT"
+            "date": "Wed, 02 Apr 2025 05:01:03 GMT"
         },
         {
             "latitude": 49.2767,
@@ -42,29 +42,29 @@
             "free_flow_travel_time": 95,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 04:09:23 GMT"
+            "date": "Wed, 02 Apr 2025 05:01:03 GMT"
         },
         {
             "latitude": 49.269,
             "longitude": -123.1122,
-            "current_speed": 25,
+            "current_speed": 23,
             "free_flow_speed": 36,
-            "current_travel_time": 76,
+            "current_travel_time": 83,
             "free_flow_travel_time": 53,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 04:09:23 GMT"
+            "date": "Wed, 02 Apr 2025 05:01:03 GMT"
         },
         {
             "latitude": 49.2895,
             "longitude": -123.115,
-            "current_speed": 14,
+            "current_speed": 18,
             "free_flow_speed": 18,
-            "current_travel_time": 52,
+            "current_travel_time": 40,
             "free_flow_travel_time": 40,
             "confidence": 1,
             "road_closure": false,
-            "date": "Tue, 01 Apr 2025 04:09:23 GMT"
+            "date": "Wed, 02 Apr 2025 05:01:03 GMT"
         }
     ]
 }

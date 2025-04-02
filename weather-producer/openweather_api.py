@@ -4,50 +4,10 @@ import os
 import json
 import pandas as pd
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
-weather_data_sample = [
-    {
-        "name": "Port Coquitlam",
-        "latitude": 49.2839,
-        "longitude": -122.7933,
-        "date": 1742970107,
-        "weather": "Clouds",
-        "weather_description": "overcast clouds",
-        "temp": 11.47,
-        "visibility": 10000,
-        "clouds": 100,
-        "rain": 0,
-        "snow": 0
-    },
-    {
-        "name": "Hope",
-        "latitude": 49.3797,
-        "longitude": -121.4414,
-        "date": 1742970107,
-        "weather": "Clear",
-        "weather_description": "clear sky",
-        "temp": 10.96,
-        "visibility": 10000,
-        "clouds": 0,
-        "rain": 0,
-        "snow": 0
-    },
-    {
-        "name": "Port Coquitlam",
-        "latitude": 49.2617,
-        "longitude": -122.7803,
-        "date": 1742970107,
-        "weather": "Clouds",
-        "weather_description": "overcast clouds",
-        "temp": 10.86,
-        "visibility": 10000,
-        "clouds": 100,
-        "rain": 0,
-        "snow": 0
-    }
-]
 
 def get_cities():
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -89,6 +49,14 @@ def fetch_api_data():
         try:
             response = requests.get(url, params=params)
             response.raise_for_status()
+            
+            if response.status_code == 429:  # If rate limit is exceeded
+                reset_time = int(response.headers.get('X-RateLimit-Reset', time.time() + 60))
+                sleep_time = reset_time - time.time() + 1  
+                print(f"Rate limit hit, sleeping for {sleep_time} seconds")
+                time.sleep(sleep_time)
+                return fetch_api_data()  # Retry after sleep
+    
             
             response_json = response.json()
             
