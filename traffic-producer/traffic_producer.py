@@ -22,7 +22,6 @@ def delivery_report(err, msg):
 def send_to_kafka(producer, topic, data):
     # Sends message to topic
     key = 'Vancouver'
-    #value = json.dumps(data)
     
     try:
         for point in data.get("traffic_data", []):
@@ -47,7 +46,7 @@ def create_producer():
     return Producer(config)
         
     
-def poll_and_send_data(producer, interval=300):
+def poll_and_send_data(producer, interval=3600):
 
     points = read_coordinates_from_csv()
     #points = ["49.2827,-123.1207"]
@@ -75,7 +74,7 @@ def main():
     logging.info("Starting data polling process.")
     try:
         producer = create_producer()
-        poll_and_send_data(producer, interval=300)  
+        poll_and_send_data(producer, interval=3600)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:

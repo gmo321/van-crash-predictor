@@ -7,7 +7,6 @@ import os
 import pandas as pd
 from dotenv import load_dotenv
 import time
-import schedule 
 
 load_dotenv()
 
@@ -48,58 +47,56 @@ def fetch_traffic_data(point):
     params = {
     'key': api_key,
     'point': point,
-    "zoom": 100,
     'unit': 'kmph',
     'thickness': 10,
     'openLr': 'false',
     'jsonp': 'false'
     }
-
-    try: 
-        response = requests.get(url, params=params)
-        response.raise_for_status()
-        if response.status_code == 429:  # If rate limit is exceeded
-            reset_time = int(response.headers.get('X-RateLimit-Reset', time.time() + 60))
-            sleep_time = reset_time - time.time() + 1  
-            print(f"Rate limit hit, sleeping for {sleep_time} seconds")
-            time.sleep(sleep_time)
-            return fetch_traffic_data(point)  # Retry after sleep
     
-        data = response.json()
-        
-        # Check if the response contains an error about the point being too far
-        if "error" in data and data.get("error") == "Point too far from nearest existing segment.":
-            return None  # Skip this point silently
-        
-        
-        segment_data = data.get("flowSegmentData", {})
-        if not segment_data:
-            return None
-
-        return {
-            "latitude": float(point.split(",")[0]),
-            "longitude": float(point.split(",")[1]),
-            "current_speed": segment_data.get("currentSpeed", "N/A"),
-            "free_flow_speed": segment_data.get("freeFlowSpeed", "N/A"),
-            "current_travel_time": segment_data.get("currentTravelTime", "N/A"),
-            "free_flow_travel_time": segment_data.get("freeFlowTravelTime", "N/A"),
-            "confidence": segment_data.get("confidence", "N/A"),
-            "road_closure": segment_data.get("roadClosure", "N/A"),
-            "date": response.headers.get("Date", "N/A")
-        }        
+    max_retries = 5  # Limit retries to avoid infinite loops
+    retry_delay = 10  # Initial delay in seconds for exponential backoff
+    
+    for attempt in range(max_retries):
+        try: 
+            response = requests.get(url, params=params)
+            response.raise_for_status()
             
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 400:
-            error_message = e.response.json().get("error", "")
-            if error_message == "Point too far from nearest existing segment.":
-                return None 
-        logging.error(f"HTTP Error for {point}: {e}")
-        return None
-    
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching traffic data for {point}: {e}")
-        return None
-    
+            if response.status_code == 429:  # Too many requests (rate limit)
+                reset_time = int(response.headers.get('X-RateLimit-Reset', time.time() + 60))
+                sleep_time = max(reset_time - time.time(), retry_delay)
+                logging.warning(f"Rate limit exceeded (Attempt {attempt+1}/{max_retries}). Sleeping for {sleep_time:.2f} seconds.")
+                time.sleep(sleep_time)
+                retry_delay *= 2  # Exponential backoff (10s -> 20s -> 40s ...)
+                continue 
+
+            data = response.json()
+            
+            # Check if the response contains an error about the point being too far
+            if "error" in data and data.get("error") == "Point too far from nearest existing segment.":
+                return None  # Skip this point silently
+            
+            segment_data = data.get("flowSegmentData", {})
+            if not segment_data:
+                return None
+
+            return {
+                "latitude": float(point.split(",")[0]),
+                "longitude": float(point.split(",")[1]),
+                "current_speed": segment_data.get("currentSpeed", "N/A"),
+                "free_flow_speed": segment_data.get("freeFlowSpeed", "N/A"),
+                "current_travel_time": segment_data.get("currentTravelTime", "N/A"),
+                "free_flow_travel_time": segment_data.get("freeFlowTravelTime", "N/A"),
+                "confidence": segment_data.get("confidence", "N/A"),
+                "road_closure": segment_data.get("roadClosure", "N/A"),
+                "date": response.headers.get("Date", "N/A")
+            }
+            
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 400:
+                logging.info(f"Skipping point {point}: Received 400 Bad Request.")
+                return None  # Skip and do not retry
+        
+        
    
 
 def fetch_bulk_data(points):
@@ -109,15 +106,6 @@ def fetch_bulk_data(points):
     #return results
     return {"traffic_data": [res for res in results if res]}
 
-
-# Schedules task every 30 minutes
-def schedule_polling():
-    logging.info("Starting scheduled polling...")
-    schedule.every(30).minutes.do(main)  # Schedules the `main()` function every 30 minutes
-
-    while True:
-        schedule.run_pending()  # Run all the pending scheduled tasks
-        time.sleep(1)
 
 def main():
     logging.info("Starting data polling process.")
@@ -140,4 +128,4 @@ def main():
         
 
 if __name__ == "__main__":
-    schedule_polling()
+    main()
