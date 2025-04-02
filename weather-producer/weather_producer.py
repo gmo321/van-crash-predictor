@@ -7,7 +7,7 @@ import os
 from openweather_api import get_cities
 from openweather_api import fetch_api_data
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 # Kafka configuration
 KAFKA_TOPIC = "weather-data"
@@ -48,7 +48,7 @@ def create_producer():
     return Producer(config)
         
     
-def poll_and_send_data(producer, interval=30):
+def poll_and_send_data(producer, interval=300):
     while True:
         try:
             data = fetch_api_data()
@@ -70,7 +70,7 @@ def main():
     logging.info("Starting data polling process.")
     try:
         producer = create_producer()
-        poll_and_send_data(producer, interval=30)  
+        poll_and_send_data(producer, interval=300)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:
