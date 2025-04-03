@@ -6,3 +6,5 @@ data/raw/TAS_no_city.csv
 data/raw/TAS_no_CF.csv  
 data/raw/TAS_entity.csv  
 data/raw/ICBC_BC_full.csv
+
+spark_jars
