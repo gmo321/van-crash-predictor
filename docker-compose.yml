@@ -40,6 +40,7 @@ services:
       - '8888:8888'
     volumes:
       - './notebooks:/home/jovyan/work'
+      - './spark_jars:/home/jovyan/spark_jars'
     environment:
       - 'JUPYTER_TOKEN=${JUPYTER_TOKEN}'
   weather-producer:
