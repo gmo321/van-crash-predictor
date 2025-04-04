@@ -10,6 +10,7 @@ from pyspark.sql.functions import row_number
 from pyspark.sql.functions import col, count, first
 from pyspark.ml.feature import Imputer
 from pyspark.sql.types import IntegerType, BooleanType, DateType
+from pyspark.sql.functions import when, col, avg
 
 
 
@@ -29,7 +30,6 @@ def main(spark):
 
     
     ### CLEAN TAS DATA SETS ###
-    
     
     # Remove municipalities with value "UNKNOWN"
     no_cf_df = no_cf_df.filter(~col("municipality").contains("UNKNOWN"))
@@ -167,9 +167,9 @@ def main(spark):
                     .withColumn('traffic_flow', lower('traffic_flow')) \
                     .withColumn('municipality', lower('municipality')) \
                     .withColumn('damage_location', lower('damage_location')) \
-                    .withColumn('damage_severity', lower('damage_severity'))
-                    
-                    
+                    .withColumn('damage_severity', lower('damage_severity')) \
+                    .withColumn('speed_involved', lower('speed_involved')) 
+                                
     
     merged_df2 = merged_df2.withColumnRenamed('accident_type', 'crash_severity')
     
@@ -185,47 +185,51 @@ def main(spark):
                                                   "crash_severity"],
                                   how='inner')
     
-    #merged_all_df.show()
     
-    #['municipality', 'year', 'month', 'region', 'crash_configuration', 'total_casualty', 'pedestrian_involved', 'crash_severity', 'day', 'is_intersection_crash', 'street', 
-    # 'time', 'total_crashes', 'latitude', 'cross_street', 'longitude', 'city', 'collision_type', 'light', 'road_condition', 'weather', 'road_surface', 'speed_limit_km_h', 
-    # 'speed_advisory', 'traffic_control', 'traffic_flow', 'total_vehicles_involved', 'alcohol_involved', 'distraction_involved', 'driving_too_fast', 'drug_involved', 'exceeding_speed', 
-    # 'excessive_speed', 'fell_asleep', 'impaired_involved', 'speed_involved', 'driver_inattentive', 'damage_location', 'damage_severity', 'pre_action']
-    #merged_all_df.show(3, truncate=False)
+    # Drop unneeded columns
+    merged_all_df = merged_all_df.drop('crash_severity', 
+                                       'crash_configuration', 
+                                       'collision_type', 
+                                       'damage_location', 
+                                       'traffic_flow', 
+                                       'traffic_control', 
+                                       'speed_advisory', 
+                                       'exceeding_speed', 
+                                       'excessive_speed',
+                                       'driver_inattentive',
+                                       'alcohol_involved',
+                                       'driving_too_fast',
+                                       'fell_asleep',
+                                       'pre_action',
+                                       'light',
+                                       )
     
-    #print(merged_all_df.count()) #89041018
-    
-    #merged_all_df.show(5, truncate=False)
     
 
     ### FEATURE ENGINEERING ###
     # TODO
-    # Include peak traffic indicators for rush hour
     # Geospatial data
-    # Create crash_severity column (e.g minor, major, fatal)
-    # Create speeding column
-    # Create general driver distraction column
 
-    
     # Create columnn "day_numeric" to convert "day" column to numerical format (e.g Monday = 0, Tuesday = 2, etc.)
     merged_all_df = merged_all_df.withColumn('day_numeric',
-                                             F.when(col('day') == 'MONDAY', 0)
-                                             .when(col('day') == 'TUESDAY', 1)
-                                             .when(col('day') == 'WEDNESDAY', 2)
-                                             .when(col('day') == 'THURSDAY', 3)
-                                             .when(col('day') == 'FRIDAY', 4)
-                                             .when(col('day') == 'SATURDAY', 5)
-                                             .when(col('day') == 'SUNDAY', 6)
+                                             F.when(col('day') == 'monday', 0)
+                                             .when(col('day') == 'tuesday', 1)
+                                             .when(col('day') == 'wednesday', 2)
+                                             .when(col('day') == 'thursday', 3)
+                                             .when(col('day') == 'friday', 4)
+                                             .when(col('day') == 'saturday', 5)
+                                             .when(col('day') == 'sunday', 6)
                                              .cast(IntegerType()))
     
     
     # Create "is_weekend" flag column
     merged_all_df = merged_all_df.withColumn('is_weekend',
                                              F.when((col('day_numeric') == 5) | (col('day_numeric') == 6), 1).otherwise(0))
+        
                                         
     # Create column "month_numeric" to convert "month" column to numeric format (e.g January = 1, February = 2, etc.)
     merged_all_df = merged_all_df.withColumn('month_numeric',
-                                             F.when(col('month') == 'janurary', 1)
+                                             F.when(col('month') == 'january', 1)
                                              .when(col('month') == 'february', 2)
                                              .when(col('month') == 'march', 3)
                                              .when(col('month') == 'april', 4)
@@ -247,7 +251,11 @@ def main(spark):
                                              .when((col('time') == '18:00-20:59') | (col('time') == '21:00-23:59'), 'evening')
                                              .when((col('time') == '00:00-02:59') | (col('time') == '03:00-05:59'), 'night'))
     
-
+    # Create column "is_rush_hour" to identify common rush hour periods (e.g '06:00-08:59' or '03:00-05:59')
+    merged_all_df = merged_all_df.withColumn('is_rush_hour',
+                                             F.when((col('time') == '06:00-08:59') | (col('time') == '15:00-17:59'), 1).otherwise(0))
+    
+    
     # Create column "season" to categorize months to season
     merged_all_df = merged_all_df.withColumn("season",
                                              F.when((col('month_numeric') == '3') | 
@@ -263,33 +271,57 @@ def main(spark):
                                                    (col('month_numeric') == '1') | 
                                                    (col('month_numeric') == '2'), 'winter'))
     
-    #merged_all_df.select('time', 'time_period', 'day', 'day_numeric', 'is_weekend', 'month', 'month_numeric', 'season').show()
     
-    #merged_all_df.groupBy('region').agg(count("*").alias('count')).show(truncate=False)
+    # Create general driver distracted column
+    #merged_all_df = merged_all_df.withColumn("risk_factor",
+    #                                         F.when((col("speed_involved") == 1) | (col("distraction_involved") == 1) | 
+    #                                                (col("impaired_involved") == 1) | (col("drug_involved") == 1), 1).otherwise(0))
     
+    # Create column "crash_severity"
+    # crash_severity: minor, moderate, severe
+    merged_all_df = merged_all_df.withColumn("crash_severity",
+                                             when(
+                                                 (col("total_casualty") >= 3) |
+                                                 (col("total_crashes") >= 3) |
+                                                 (col("damage_severity").isin(["demolished(repair impractical)", "severe"])) | 
+                                                 (col("total_vehicles_involved") >= 3), "severe"
+                                             ).when(
+                                                 (col("total_casualty") == 0) | (col("total_casualty") == 1) |
+                                                 (col("total_crashes") == 1) &
+                                                 (col("damage_severity").isin(["minor", "no damage (none visible)"])), "minor"
+                                             ).when(
+                                                 col("total_casualty").between(1, 2) |
+                                                 col("total_crashes").between(1, 2) &
+                                                 (col("damage_severity") == "moderate"), "moderate"
+                                             ).otherwise("unknown"))
+    
+
+    
+    merged_all_df = merged_all_df.select('latitude', 'longitude', 'year', 'month', 'day', 'municipality', 'region', 'total_casualty', 'is_intersection_crash', 'street', 
+                                         'total_crashes', 'cross_street', 'weather', 'road_condition', 'road_surface', 'speed_limit_km_h', 'pedestrian_involved', 
+                                         'total_vehicles_involved', 'distraction_involved', 'drug_involved', 'impaired_involved', 'speed_involved', 
+                                         'is_weekend', 'time_period', 'is_rush_hour', 'season', 'crash_severity')
  
-    #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
-    
-    #print(merged_all_df.count()) #89041018 
+    merged_all_df = merged_all_df.withColumn('pedestrian_involved', F.when(F.col('pedestrian_involved') == 'true', 1).otherwise(0)) \
+       .withColumn('distraction_involved', F.when(F.col('distraction_involved') == 'Yes', 1).otherwise(0)) \
+       .withColumn('drug_involved', F.when(F.col('drug_involved') == 'Yes', 1).otherwise(0)) \
+       .withColumn('impaired_involved', F.when(F.col('impaired_involved') == 'Yes', 1).otherwise(0)) \
+       .withColumn('speed_involved', F.when(F.col('speed_involved') == 'yes', 1).otherwise(0)) \
+       .withColumn('is_weekend', F.when(F.col('is_weekend') == 1, 1).otherwise(0)) \
+       .withColumn('is_rush_hour', F.when(F.col('is_rush_hour') == 1, 1).otherwise(0))
+       
+    #merged_all_df = merged_all_df.select('pedestrian_involved', 'distraction_involved', 'drug_involved', 'impaired_involved', 'speed_involved', 'is_weekend', 'is_rush_hour').show()
+    #merged_all_df.show(20, truncate=False)
 
-    #merged_all_df.dropDuplicates()
-    
-    #merged_all_df.groupBy("municipality").agg(count("*").alias('count')).orderBy(col('count').desc()).show(truncate=False)
+    # Unknown value in columns: weather, road_condition, road_surface
+    # Drop duplicate rows
+    merged_all_df = merged_all_df.dropDuplicates()
 
-    #municipalities = merged_all_df.select("municipality").distinct().collect()
-    
-    #municipalities_list = [row["municipality"] for row in municipalities]
-    #print(municipalities_list)
-    
-    # Parquet merged data
-    #merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
-
-
-
-
+    merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
     
 
 if __name__ == '__main__':  
+     
     spark = SparkSession.builder \
         .appName('Data Processing') \
         .config("spark.driver.memory", "4g") \

@@ -14,10 +14,10 @@
         {
             "latitude": 49.26,
             "longitude": -123.1135,
-            "current_speed": 40,
-            "free_flow_speed": 40,
-            "current_travel_time": 90,
-            "free_flow_travel_time": 90,
+            "current_speed": 23,
+            "free_flow_speed": 39,
+            "current_travel_time": 157,
+            "free_flow_travel_time": 92,
             "confidence": 1,
             "road_closure": false,
             "date": "Wed, 02 Apr 2025 05:21:28 GMT"
@@ -25,10 +25,10 @@
         {
             "latitude": 49.28,
             "longitude": -123.1,
-            "current_speed": 10,
-            "free_flow_speed": 19,
-            "current_travel_time": 182,
-            "free_flow_travel_time": 96,
+            "current_speed": 14,
+            "free_flow_speed": 18,
+            "current_travel_time": 130,
+            "free_flow_travel_time": 101,
             "confidence": 1,
             "road_closure": false,
             "date": "Wed, 02 Apr 2025 05:21:28 GMT"
@@ -36,9 +36,9 @@
         {
             "latitude": 49.2767,
             "longitude": -123.1121,
-            "current_speed": 31,
+            "current_speed": 21,
             "free_flow_speed": 31,
-            "current_travel_time": 95,
+            "current_travel_time": 141,
             "free_flow_travel_time": 95,
             "confidence": 1,
             "road_closure": false,
@@ -47,10 +47,10 @@
         {
             "latitude": 49.269,
             "longitude": -123.1122,
-            "current_speed": 19,
-            "free_flow_speed": 38,
-            "current_travel_time": 100,
-            "free_flow_travel_time": 50,
+            "current_speed": 23,
+            "free_flow_speed": 36,
+            "current_travel_time": 83,
+            "free_flow_travel_time": 53,
             "confidence": 1,
             "road_closure": false,
             "date": "Wed, 02 Apr 2025 05:21:28 GMT"

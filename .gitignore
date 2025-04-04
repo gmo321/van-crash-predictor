@@ -1,6 +1,6 @@
 .env
 venv
-
+.DS_Store
 # Ignore large raw data files
 data/raw/TAS_no_city.csv  
 data/raw/TAS_no_CF.csv  
@@ -10,5 +10,7 @@ data/raw/ICBC_BC_full.csv
 spark_jars/
 
 notebooks/repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar
+
+spark_jars/
 
 spark_jars/
