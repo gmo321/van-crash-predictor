@@ -13,28 +13,29 @@ from pyspark.sql.types import IntegerType, BooleanType, DateType
 from pyspark.sql.functions import col, to_timestamp, from_utc_timestamp
 from delta import *
 from delta import configure_spark_with_delta_pip
+from pyspark.sql.functions import hour, round, col
 
 def main(spark):
-    print(spark.version)  # This gives the Spark version
-    REAL_TIME_WEATHER_DATA_PATH = "s3a://van-crash-data/weather-data/"
-    REAL_TIME_TRAFFIC_DATA_PATH = "s3a://van-crash-data/traffic-data/"
+    REAL_TIME_WEATHER_DATA_PATH = "s3a://van-crash-data/weather-data-delta/v1/"
+    REAL_TIME_TRAFFIC_DATA_PATH = "s3a://van-crash-data/traffic-data-delta/v1/"
+    df = spark.read.parquet(...)
     
-    delta_table_path = "s3a://van-crash-data/weather-data-delta/"
     
-    delta_df = spark.read.format("delta").load(delta_table_path)
-    
-    delta_df.show()
+    weather_agg_df = spark.read.format("delta").load(REAL_TIME_WEATHER_DATA_PATH)
+    traffic_agg_df = spark.read.format("delta").load(REAL_TIME_TRAFFIC_DATA_PATH)
 
-    traffic_df = spark.read.parquet(REAL_TIME_TRAFFIC_DATA_PATH)
-    weather_df = spark.read.parquet(REAL_TIME_WEATHER_DATA_PATH)
     
-    weather_df = weather_df.withColumn("date", col("date").cast("timestamp"))
     
-    traffic_df_sorted = weather_df.orderBy(col("date").desc())
+    
+    #weather_df = weather_df.withColumn("date", col("date").cast("timestamp"))
+    
+    weather_agg_df.show()
+    
+    #traffic_df_sorted = weather_df.orderBy(col("date").desc())
     
     #traffic_df_sorted.show()
     
-    real_time_df = traffic_df_sorted.withColumn('local_date', from_utc_timestamp(col('date'), 'PST'))
+    #real_time_df = traffic_df_sorted.withColumn('local_date', from_utc_timestamp(col('date'), 'PST'))
 
     #real_time_df.show(5)
     
