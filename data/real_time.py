@@ -11,10 +11,19 @@ from pyspark.sql.functions import col, count, first
 from pyspark.ml.feature import Imputer
 from pyspark.sql.types import IntegerType, BooleanType, DateType
 from pyspark.sql.functions import col, to_timestamp, from_utc_timestamp
+from delta import *
+from delta import configure_spark_with_delta_pip
 
 def main(spark):
+    print(spark.version)  # This gives the Spark version
     REAL_TIME_WEATHER_DATA_PATH = "s3a://van-crash-data/weather-data/"
     REAL_TIME_TRAFFIC_DATA_PATH = "s3a://van-crash-data/traffic-data/"
+    
+    delta_table_path = "s3a://van-crash-data/weather-data-delta/"
+    
+    delta_df = spark.read.format("delta").load(delta_table_path)
+    
+    delta_df.show()
 
     traffic_df = spark.read.parquet(REAL_TIME_TRAFFIC_DATA_PATH)
     weather_df = spark.read.parquet(REAL_TIME_WEATHER_DATA_PATH)
@@ -27,21 +36,35 @@ def main(spark):
     
     real_time_df = traffic_df_sorted.withColumn('local_date', from_utc_timestamp(col('date'), 'PST'))
 
-    real_time_df.show(5)
+    #real_time_df.show(5)
     
     # Optionally, save locally for debugging
     #real_time_df.write.mode("overwrite").parquet("./data/real_time_sample.parquet")
+    
+
     
     return
 
 
 if __name__ == '__main__':  
-    spark = SparkSession.builder \
+    packages = [
+        "io.delta:delta-spark_2.12:jar:3.2.0",
+    ]
+    
+    #delta_spark_jar_path = "/Users/gloriamo/Desktop/van-crash-predictor/spark_jars/delta-spark_2.12-3.2.0.jar"
+    
+    builder = SparkSession.builder \
         .appName('Real-Time Data Processing') \
-        .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-        .getOrCreate()
+        .config("spark.jars.packages", "io.delta:delta-spark_2.12:jar:3.2.0") \
+        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+        
+    # Configure the Spark session with Delta using Delta Pip
+    spark = configure_spark_with_delta_pip(builder).getOrCreate()
+    
+    
         
     assert spark.version >= '3.0' # make sure we have Spark 3.0+
     spark.sparkContext.setLogLevel('WARN')
-    sc = spark.sparkContext
+    
     main(spark)
