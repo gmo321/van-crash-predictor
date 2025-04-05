@@ -302,15 +302,18 @@ def main(spark):
                                          'total_vehicles_involved', 'distraction_involved', 'drug_involved', 'impaired_involved', 'speed_involved', 
                                          'is_weekend', 'time_period', 'is_rush_hour', 'season', 'crash_severity')
  
+    # Converting to binary values
     merged_all_df = merged_all_df.withColumn('pedestrian_involved', F.when(F.col('pedestrian_involved') == 'true', 1).otherwise(0)) \
-       .withColumn('distraction_involved', F.when(F.col('distraction_involved') == 'Yes', 1).otherwise(0)) \
-       .withColumn('drug_involved', F.when(F.col('drug_involved') == 'Yes', 1).otherwise(0)) \
-       .withColumn('impaired_involved', F.when(F.col('impaired_involved') == 'Yes', 1).otherwise(0)) \
-       .withColumn('speed_involved', F.when(F.col('speed_involved') == 'yes', 1).otherwise(0)) \
-       .withColumn('is_weekend', F.when(F.col('is_weekend') == 1, 1).otherwise(0)) \
-       .withColumn('is_rush_hour', F.when(F.col('is_rush_hour') == 1, 1).otherwise(0))
+            .withColumn('distraction_involved', F.when(F.col('distraction_involved') == 'Yes', 1).otherwise(0)) \
+            .withColumn('drug_involved', F.when(F.col('drug_involved') == 'Yes', 1).otherwise(0)) \
+            .withColumn('impaired_involved', F.when(F.col('impaired_involved') == 'Yes', 1).otherwise(0)) \
+            .withColumn('speed_involved', F.when(F.col('speed_involved') == 'yes', 1).otherwise(0)) \
+            .withColumn('is_weekend', F.when(F.col('is_weekend') == 1, 1).otherwise(0)) \
+            .withColumn('is_rush_hour', F.when(F.col('is_rush_hour') == 1, 1).otherwise(0)) \
+            .withColumn('is_intersection_crash', F.when(F.col('is_intersection_crash') == 'true', 1).otherwise(0))
+                
        
-    #merged_all_df = merged_all_df.select('pedestrian_involved', 'distraction_involved', 'drug_involved', 'impaired_involved', 'speed_involved', 'is_weekend', 'is_rush_hour').show()
+    #merged_all_df = merged_all_df.select('is_intersection_crash', 'distraction_involved', 'drug_involved', 'impaired_involved', 'speed_involved', 'is_weekend', 'is_rush_hour').show()
     #merged_all_df.show(20, truncate=False)
 
     # Unknown value in columns: weather, road_condition, road_surface
