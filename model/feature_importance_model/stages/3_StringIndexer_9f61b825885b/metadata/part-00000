@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexerModel","timestamp":1743921496730,"sparkVersion":"3.5.2","uid":"StringIndexer_9f61b825885b","paramMap":{"outputCol":"road_condition_index","handleInvalid":"skip","inputCol":"road_condition"},"defaultParamMap":{"outputCol":"StringIndexer_9f61b825885b__output","handleInvalid":"error","stringOrderType":"frequencyDesc"}}
