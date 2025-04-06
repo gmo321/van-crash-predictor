@@ -36,10 +36,10 @@ def main(spark):
     #traffic_agg_df.orderBy(col("window").getField("end").desc()).show(truncate=False)
     
     #weather_agg_df.orderBy(col("window").getField("end").desc()).show(truncate=False)
-    #print(weather_agg_df.count()) 
+    print(weather_agg_df.count()) 
     #8947
     #print(weather_agg_df_v1.count())
-    #print(traffic_agg_df.count())
+    print(traffic_agg_df.count())
     #8802
     #print(traffic_agg_df_v1.count())
 
