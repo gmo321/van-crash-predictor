@@ -1,1 +1,0 @@
-{"class":"org.apache.spark.ml.feature.StringIndexerModel","timestamp":1743921319747,"sparkVersion":"3.5.2","uid":"StringIndexer_e77e18203ab6","paramMap":{"outputCol":"label","handleInvalid":"skip","inputCol":"hotspot_risk_level"},"defaultParamMap":{"outputCol":"StringIndexer_e77e18203ab6__output","handleInvalid":"error","stringOrderType":"frequencyDesc"}}
