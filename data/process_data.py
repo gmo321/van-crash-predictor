@@ -295,6 +295,8 @@ def main(spark):
                                                  (col("damage_severity") == "moderate"), "moderate"
                                              ).otherwise("unknown"))
     
+    #merged_all_df.groupBy("crash_severity").count().show()
+    
 
     
     merged_all_df = merged_all_df.select('latitude', 'longitude', 'year', 'month', 'day', 'municipality', 'region', 'total_casualty', 'is_intersection_crash', 'street', 
@@ -319,6 +321,8 @@ def main(spark):
     # Unknown value in columns: weather, road_condition, road_surface
     # Drop duplicate rows
     merged_all_df = merged_all_df.dropDuplicates()
+    
+    #print(merged_all_df.count())
 
     merged_all_df.write.parquet("data/parquet/merged", compression='LZ4', mode='overwrite')
     
