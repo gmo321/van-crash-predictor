@@ -19,3 +19,4 @@ notebooks/repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-
 __pycache__/
 
 .vscode/spark_jars/
+spark_jars/
