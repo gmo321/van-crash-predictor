@@ -64,8 +64,7 @@ This project analyzes historical car crash data in British Columbia to predict h
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Project Pipeline: 
-![BC Crash Prediction Pipeline](https://github.sfu.ca/gma89/van-crash-predictor/raw/staging/bc_crash_prediction_pipeline.png)
-<sub>Pipeline created using the "diagrams" library in Python!</sub>
+![BC Crash Prediction Pipeline](https://github.sfu.ca/gma89/van-crash-predictor/blob/main/pipeline.drawio.png)
 
 ### Built With
 
