@@ -33,7 +33,7 @@ def send_to_kafka(topic, data):
         logging.error(f"Error sending to Kafka: {e}")
         
     
-def poll_and_send_data(interval=10):
+def poll_and_send_data(interval=3600):
     point = "49.2827,-123.1207"
     
     while True:
@@ -45,7 +45,7 @@ def poll_and_send_data(interval=10):
 def main():
     logging.info("Starting data polling process.")
     try:
-        poll_and_send_data(interval=30)  
+        poll_and_send_data(interval=3600)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:
