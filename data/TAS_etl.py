@@ -295,16 +295,16 @@ def main(spark):
     #no_cf_df.groupBy("municipality").count().orderBy("count", ascending=False).show()
 
     # Write parquet files
-    no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
-    no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
-    entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
+    #no_cf_df.write.parquet("data/parquet/TAS/no_cf", compression='LZ4', mode='overwrite')
+    #no_city_df.write.parquet("data/parquet/TAS/no_city", compression='LZ4', mode='overwrite')
+    #entity_df.write.parquet("data/parquet/TAS/entity", compression='LZ4', mode='overwrite')
     
-    #try:
-    #    no_cf_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_cf", compression='LZ4', mode='overwrite')
-    #    no_city_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_city", compression='LZ4', mode='overwrite')
-    #    entity_df.write.parquet("s3a://van-crash-data/TAS/processed-data/entity", compression='LZ4', mode='overwrite')
-    #except Exception as e:
-    #    print(f"Error writing to S3: {e}")
+    try:
+        no_cf_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_cf", compression='LZ4', mode='overwrite')
+        no_city_df.write.parquet("s3a://van-crash-data/TAS/processed-data/no_city", compression='LZ4', mode='overwrite')
+        entity_df.write.parquet("s3a://van-crash-data/TAS/processed-data/entity", compression='LZ4', mode='overwrite')
+    except Exception as e:
+        print(f"Error writing to S3: {e}")
 
 
 
