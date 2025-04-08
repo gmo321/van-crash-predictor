@@ -1,0 +1,12 @@
+__pycache__/
+.venv/
+*.pyc
+*.pkl
+*.ipynb
+*.log
+*.csv
+*.json
+*.db
+.DS_Store
+*.parquet
+.git/

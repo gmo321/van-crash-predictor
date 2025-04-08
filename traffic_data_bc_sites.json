@@ -3,13 +3,13 @@
         {
             "latitude": 49.2838889,
             "longitude": -122.7933334,
-            "current_speed": 17,
+            "current_speed": 28,
             "free_flow_speed": 28,
-            "current_travel_time": 216,
+            "current_travel_time": 131,
             "free_flow_travel_time": 131,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3797222,
@@ -20,18 +20,18 @@
             "free_flow_travel_time": 185,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2616666,
             "longitude": -122.7802778,
-            "current_speed": 21,
+            "current_speed": 36,
             "free_flow_speed": 36,
-            "current_travel_time": 271,
+            "current_travel_time": 158,
             "free_flow_travel_time": 158,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.9986111,
@@ -42,7 +42,7 @@
             "free_flow_travel_time": 316,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1575,
@@ -53,7 +53,7 @@
             "free_flow_travel_time": 20,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0972222,
@@ -64,7 +64,7 @@
             "free_flow_travel_time": 680,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2997223,
@@ -75,18 +75,18 @@
             "free_flow_travel_time": 336,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.7330556,
             "longitude": -114.8855555,
-            "current_speed": 68,
+            "current_speed": 80,
             "free_flow_speed": 80,
-            "current_travel_time": 199,
+            "current_travel_time": 169,
             "free_flow_travel_time": 169,
-            "confidence": 0.958271,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.5163888,
@@ -97,7 +97,7 @@
             "free_flow_travel_time": 388,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2044444,
@@ -108,18 +108,18 @@
             "free_flow_travel_time": 129,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2819445,
             "longitude": -122.8291666,
-            "current_speed": 21,
+            "current_speed": 31,
             "free_flow_speed": 31,
-            "current_travel_time": 69,
+            "current_travel_time": 46,
             "free_flow_travel_time": 46,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2502778,
@@ -130,7 +130,7 @@
             "free_flow_travel_time": 425,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.5161111,
@@ -141,7 +141,7 @@
             "free_flow_travel_time": 23,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0308334,
@@ -152,7 +152,7 @@
             "free_flow_travel_time": 457,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.5941666,
@@ -163,18 +163,18 @@
             "free_flow_travel_time": 143,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.8877778,
             "longitude": -119.4955556,
-            "current_speed": 27,
-            "free_flow_speed": 44,
-            "current_travel_time": 180,
-            "free_flow_travel_time": 110,
+            "current_speed": 45,
+            "free_flow_speed": 45,
+            "current_travel_time": 108,
+            "free_flow_travel_time": 108,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.6519444,
@@ -185,7 +185,7 @@
             "free_flow_travel_time": 519,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2341667,
@@ -196,18 +196,18 @@
             "free_flow_travel_time": 4185,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4563889,
             "longitude": -123.3730555,
-            "current_speed": 26,
+            "current_speed": 42,
             "free_flow_speed": 42,
-            "current_travel_time": 95,
+            "current_travel_time": 59,
             "free_flow_travel_time": 59,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.5077778,
@@ -218,29 +218,29 @@
             "free_flow_travel_time": 34,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3177778,
             "longitude": -124.3113889,
-            "current_speed": 36,
-            "free_flow_speed": 50,
-            "current_travel_time": 182,
-            "free_flow_travel_time": 131,
-            "confidence": 0.998136,
+            "current_speed": 51,
+            "free_flow_speed": 51,
+            "current_travel_time": 128,
+            "free_flow_travel_time": 128,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1022222,
             "longitude": -122.6580555,
-            "current_speed": 11,
-            "free_flow_speed": 28,
-            "current_travel_time": 80,
-            "free_flow_travel_time": 31,
+            "current_speed": 30,
+            "free_flow_speed": 30,
+            "current_travel_time": 29,
+            "free_flow_travel_time": 29,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.8352778,
@@ -251,18 +251,18 @@
             "free_flow_travel_time": 42,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.7783334,
             "longitude": -123.7080556,
-            "current_speed": 45,
+            "current_speed": 58,
             "free_flow_speed": 58,
-            "current_travel_time": 165,
+            "current_travel_time": 128,
             "free_flow_travel_time": 128,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.6977778,
@@ -273,7 +273,7 @@
             "free_flow_travel_time": 1032,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.4713889,
@@ -284,7 +284,7 @@
             "free_flow_travel_time": 617,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.3980555,
@@ -295,29 +295,29 @@
             "free_flow_travel_time": 552,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0233333,
             "longitude": -122.7980555,
-            "current_speed": 35,
+            "current_speed": 48,
             "free_flow_speed": 48,
-            "current_travel_time": 196,
+            "current_travel_time": 143,
             "free_flow_travel_time": 143,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2197222,
             "longitude": -122.5988889,
-            "current_speed": 23,
+            "current_speed": 46,
             "free_flow_speed": 46,
-            "current_travel_time": 249,
+            "current_travel_time": 124,
             "free_flow_travel_time": 124,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1930556,
@@ -328,7 +328,7 @@
             "free_flow_travel_time": 1145,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.1122222,
@@ -339,7 +339,7 @@
             "free_flow_travel_time": 226,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.6561111,
@@ -350,29 +350,29 @@
             "free_flow_travel_time": 191,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 55.7602778,
             "longitude": -120.2355556,
-            "current_speed": 34,
-            "free_flow_speed": 46,
-            "current_travel_time": 210,
-            "free_flow_travel_time": 155,
-            "confidence": 0.998926,
+            "current_speed": 47,
+            "free_flow_speed": 47,
+            "current_travel_time": 152,
+            "free_flow_travel_time": 152,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 53.9127778,
             "longitude": -122.7452778,
-            "current_speed": 23,
-            "free_flow_speed": 41,
-            "current_travel_time": 181,
-            "free_flow_travel_time": 101,
-            "confidence": 0.959329,
+            "current_speed": 42,
+            "free_flow_speed": 42,
+            "current_travel_time": 99,
+            "free_flow_travel_time": 99,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.8330556,
@@ -383,18 +383,18 @@
             "free_flow_travel_time": 464,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3241666,
             "longitude": -117.6666666,
-            "current_speed": 40,
-            "free_flow_speed": 50,
-            "current_travel_time": 333,
-            "free_flow_travel_time": 266,
-            "confidence": 0.992077,
+            "current_speed": 51,
+            "free_flow_speed": 51,
+            "current_travel_time": 261,
+            "free_flow_travel_time": 261,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 52.1288889,
@@ -405,29 +405,29 @@
             "free_flow_travel_time": 563,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4294445,
             "longitude": -123.4141666,
-            "current_speed": 27,
-            "free_flow_speed": 33,
-            "current_travel_time": 230,
-            "free_flow_travel_time": 188,
-            "confidence": 0.963559,
+            "current_speed": 34,
+            "free_flow_speed": 34,
+            "current_travel_time": 182,
+            "free_flow_travel_time": 182,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1113889,
             "longitude": -122.8275,
-            "current_speed": 33,
-            "free_flow_speed": 42,
-            "current_travel_time": 185,
-            "free_flow_travel_time": 145,
-            "confidence": 0.98376,
+            "current_speed": 43,
+            "free_flow_speed": 43,
+            "current_travel_time": 142,
+            "free_flow_travel_time": 142,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.2236111,
@@ -438,29 +438,29 @@
             "free_flow_travel_time": 246,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 56.2522222,
             "longitude": -120.8466666,
-            "current_speed": 47,
-            "free_flow_speed": 63,
-            "current_travel_time": 139,
-            "free_flow_travel_time": 104,
+            "current_speed": 64,
+            "free_flow_speed": 64,
+            "current_travel_time": 102,
+            "free_flow_travel_time": 102,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2063889,
             "longitude": -122.9105556,
-            "current_speed": 24,
-            "free_flow_speed": 41,
-            "current_travel_time": 298,
-            "free_flow_travel_time": 174,
-            "confidence": 0.99825,
+            "current_speed": 33,
+            "free_flow_speed": 40,
+            "current_travel_time": 217,
+            "free_flow_travel_time": 179,
+            "confidence": 0.994931,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1588889,
@@ -471,7 +471,7 @@
             "free_flow_travel_time": 85,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1636111,
@@ -482,7 +482,7 @@
             "free_flow_travel_time": 121,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.03,
@@ -493,7 +493,7 @@
             "free_flow_travel_time": 193,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.6019445,
@@ -504,29 +504,29 @@
             "free_flow_travel_time": 191,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3308333,
             "longitude": -123.1594445,
-            "current_speed": 16,
-            "free_flow_speed": 44,
-            "current_travel_time": 191,
-            "free_flow_travel_time": 69,
+            "current_speed": 45,
+            "free_flow_speed": 45,
+            "current_travel_time": 68,
+            "free_flow_travel_time": 68,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2425,
             "longitude": -122.9727778,
-            "current_speed": 29,
+            "current_speed": 38,
             "free_flow_speed": 38,
-            "current_travel_time": 169,
+            "current_travel_time": 129,
             "free_flow_travel_time": 129,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.6755556,
@@ -537,18 +537,18 @@
             "free_flow_travel_time": 24,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4516667,
             "longitude": -123.4341667,
-            "current_speed": 39,
-            "free_flow_speed": 39,
-            "current_travel_time": 122,
-            "free_flow_travel_time": 122,
-            "confidence": 1,
+            "current_speed": 24,
+            "free_flow_speed": 38,
+            "current_travel_time": 199,
+            "free_flow_travel_time": 125,
+            "confidence": 0.837498,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.8997222,
@@ -559,7 +559,7 @@
             "free_flow_travel_time": 485,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2655799,
@@ -570,18 +570,18 @@
             "free_flow_travel_time": 177,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4280555,
             "longitude": -123.3644445,
-            "current_speed": 16,
+            "current_speed": 30,
             "free_flow_speed": 30,
-            "current_travel_time": 195,
+            "current_travel_time": 104,
             "free_flow_travel_time": 104,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0786111,
@@ -592,7 +592,7 @@
             "free_flow_travel_time": 660,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.5502777,
@@ -603,7 +603,7 @@
             "free_flow_travel_time": 482,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 51.2975,
@@ -614,29 +614,29 @@
             "free_flow_travel_time": 911,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.8603478,
             "longitude": -119.608228,
-            "current_speed": 69,
-            "free_flow_speed": 77,
-            "current_travel_time": 222,
-            "free_flow_travel_time": 199,
+            "current_speed": 76,
+            "free_flow_speed": 76,
+            "current_travel_time": 202,
+            "free_flow_travel_time": 202,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0519444,
             "longitude": -122.3291667,
-            "current_speed": 26,
+            "current_speed": 42,
             "free_flow_speed": 42,
-            "current_travel_time": 234,
+            "current_travel_time": 145,
             "free_flow_travel_time": 145,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.9163889,
@@ -647,18 +647,18 @@
             "free_flow_travel_time": 430,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3477778,
             "longitude": -124.4438889,
-            "current_speed": 37,
-            "free_flow_speed": 49,
-            "current_travel_time": 196,
-            "free_flow_travel_time": 148,
-            "confidence": 0.983193,
+            "current_speed": 50,
+            "free_flow_speed": 50,
+            "current_travel_time": 145,
+            "free_flow_travel_time": 145,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.3825,
@@ -669,7 +669,7 @@
             "free_flow_travel_time": 626,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2330555,
@@ -680,7 +680,7 @@
             "free_flow_travel_time": 156,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.8255556,
@@ -691,18 +691,18 @@
             "free_flow_travel_time": 1000,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0941667,
             "longitude": -117.7091666,
-            "current_speed": 49,
+            "current_speed": 58,
             "free_flow_speed": 58,
-            "current_travel_time": 198,
+            "current_travel_time": 167,
             "free_flow_travel_time": 167,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.3202778,
@@ -713,18 +713,18 @@
             "free_flow_travel_time": 6203,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.2655556,
             "longitude": -119.2716666,
-            "current_speed": 22,
-            "free_flow_speed": 46,
-            "current_travel_time": 116,
-            "free_flow_travel_time": 55,
+            "current_speed": 47,
+            "free_flow_speed": 47,
+            "current_travel_time": 54,
+            "free_flow_travel_time": 54,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.6830556,
@@ -735,7 +735,7 @@
             "free_flow_travel_time": 256,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.9930556,
@@ -746,7 +746,7 @@
             "free_flow_travel_time": 330,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2663889,
@@ -757,40 +757,40 @@
             "free_flow_travel_time": 570,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.5005556,
             "longitude": -119.5938888,
-            "current_speed": 42,
-            "free_flow_speed": 47,
-            "current_travel_time": 826,
-            "free_flow_travel_time": 738,
-            "confidence": 0.969907,
+            "current_speed": 46,
+            "free_flow_speed": 46,
+            "current_travel_time": 754,
+            "free_flow_travel_time": 754,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.0227778,
             "longitude": -125.2433334,
-            "current_speed": 41,
-            "free_flow_speed": 44,
-            "current_travel_time": 696,
-            "free_flow_travel_time": 649,
-            "confidence": 0.979929,
+            "current_speed": 45,
+            "free_flow_speed": 45,
+            "current_travel_time": 634,
+            "free_flow_travel_time": 634,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4233333,
             "longitude": -123.4930556,
-            "current_speed": 43,
-            "free_flow_speed": 56,
-            "current_travel_time": 236,
-            "free_flow_travel_time": 181,
+            "current_speed": 57,
+            "free_flow_speed": 57,
+            "current_travel_time": 178,
+            "free_flow_travel_time": 178,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 52.9794444,
@@ -801,29 +801,29 @@
             "free_flow_travel_time": 605,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2202777,
             "longitude": -122.6902778,
-            "current_speed": 35,
+            "current_speed": 48,
             "free_flow_speed": 48,
-            "current_travel_time": 308,
+            "current_travel_time": 224,
             "free_flow_travel_time": 224,
-            "confidence": 0.988323,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.6891666,
             "longitude": -124.9955556,
-            "current_speed": 22,
+            "current_speed": 34,
             "free_flow_speed": 34,
-            "current_travel_time": 163,
+            "current_travel_time": 105,
             "free_flow_travel_time": 105,
-            "confidence": 0.997659,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0844445,
@@ -834,18 +834,18 @@
             "free_flow_travel_time": 222,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4255555,
             "longitude": -123.3180556,
-            "current_speed": 27,
-            "free_flow_speed": 39,
-            "current_travel_time": 118,
-            "free_flow_travel_time": 81,
-            "confidence": 0.993982,
+            "current_speed": 40,
+            "free_flow_speed": 40,
+            "current_travel_time": 79,
+            "free_flow_travel_time": 79,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.6575,
@@ -856,18 +856,18 @@
             "free_flow_travel_time": 256,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1630556,
             "longitude": -123.1630556,
-            "current_speed": 33,
+            "current_speed": 51,
             "free_flow_speed": 51,
-            "current_travel_time": 85,
+            "current_travel_time": 55,
             "free_flow_travel_time": 55,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.1169445,
@@ -878,7 +878,7 @@
             "free_flow_travel_time": 55,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.4,
@@ -889,62 +889,62 @@
             "free_flow_travel_time": 373,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.6725,
             "longitude": -124.9277778,
-            "current_speed": 32,
-            "free_flow_speed": 37,
-            "current_travel_time": 1401,
-            "free_flow_travel_time": 1211,
-            "confidence": 0.830375,
+            "current_speed": 36,
+            "free_flow_speed": 36,
+            "current_travel_time": 1245,
+            "free_flow_travel_time": 1245,
+            "confidence": 0.549718,
             "road_closure": true,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.7011111,
             "longitude": -119.2780555,
-            "current_speed": 51,
-            "free_flow_speed": 63,
-            "current_travel_time": 197,
-            "free_flow_travel_time": 159,
+            "current_speed": 62,
+            "free_flow_speed": 62,
+            "current_travel_time": 162,
+            "free_flow_travel_time": 162,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2608333,
             "longitude": -123.1138889,
-            "current_speed": 22,
+            "current_speed": 38,
             "free_flow_speed": 44,
-            "current_travel_time": 164,
+            "current_travel_time": 95,
             "free_flow_travel_time": 82,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.4494445,
             "longitude": -123.5041667,
-            "current_speed": 18,
+            "current_speed": 30,
             "free_flow_speed": 30,
-            "current_travel_time": 174,
+            "current_travel_time": 104,
             "free_flow_travel_time": 104,
-            "confidence": 0.996584,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3202777,
             "longitude": -123.0738889,
-            "current_speed": 28,
-            "free_flow_speed": 37,
-            "current_travel_time": 225,
-            "free_flow_travel_time": 170,
-            "confidence": 0.994667,
+            "current_speed": 38,
+            "free_flow_speed": 38,
+            "current_travel_time": 165,
+            "free_flow_travel_time": 165,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1822222,
@@ -955,7 +955,7 @@
             "free_flow_travel_time": 745,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.7736111,
@@ -966,7 +966,7 @@
             "free_flow_travel_time": 555,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.7330555,
@@ -977,7 +977,7 @@
             "free_flow_travel_time": 291,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.5038889,
@@ -988,7 +988,7 @@
             "free_flow_travel_time": 650,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.7830556,
@@ -999,7 +999,7 @@
             "free_flow_travel_time": 764,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 55.6955555,
@@ -1010,7 +1010,7 @@
             "free_flow_travel_time": 358,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1830556,
@@ -1021,7 +1021,7 @@
             "free_flow_travel_time": 439,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.6502778,
@@ -1032,18 +1032,18 @@
             "free_flow_travel_time": 73,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.4930555,
             "longitude": -117.2955556,
-            "current_speed": 36,
-            "free_flow_speed": 46,
-            "current_travel_time": 182,
-            "free_flow_travel_time": 143,
-            "confidence": 0.99662,
+            "current_speed": 47,
+            "free_flow_speed": 47,
+            "current_travel_time": 139,
+            "free_flow_travel_time": 139,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0427777,
@@ -1054,7 +1054,7 @@
             "free_flow_travel_time": 226,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 51.0497222,
@@ -1065,7 +1065,7 @@
             "free_flow_travel_time": 1255,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.8830555,
@@ -1076,7 +1076,7 @@
             "free_flow_travel_time": 591,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3497223,
@@ -1087,7 +1087,7 @@
             "free_flow_travel_time": 914,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.4480556,
@@ -1098,7 +1098,7 @@
             "free_flow_travel_time": 1006,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.0172222,
@@ -1109,7 +1109,7 @@
             "free_flow_travel_time": 567,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.4222222,
@@ -1120,7 +1120,7 @@
             "free_flow_travel_time": 748,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 51.6452778,
@@ -1131,7 +1131,7 @@
             "free_flow_travel_time": 725,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:45 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.7830556,
@@ -1142,7 +1142,7 @@
             "free_flow_travel_time": 192,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.3997222,
@@ -1153,7 +1153,7 @@
             "free_flow_travel_time": 370,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 48.5477778,
@@ -1164,18 +1164,18 @@
             "free_flow_travel_time": 397,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.3125,
             "longitude": -130.3252778,
-            "current_speed": 23,
+            "current_speed": 36,
             "free_flow_speed": 36,
-            "current_travel_time": 202,
+            "current_travel_time": 129,
             "free_flow_travel_time": 129,
-            "confidence": 0.99,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0322222,
@@ -1186,7 +1186,7 @@
             "free_flow_travel_time": 737,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2163889,
@@ -1197,7 +1197,7 @@
             "free_flow_travel_time": 434,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.8358334,
@@ -1208,7 +1208,7 @@
             "free_flow_travel_time": 997,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2975663,
@@ -1219,18 +1219,18 @@
             "free_flow_travel_time": 1205,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.46,
             "longitude": -120.5077777,
-            "current_speed": 22,
+            "current_speed": 27,
             "free_flow_speed": 27,
-            "current_travel_time": 107,
+            "current_travel_time": 87,
             "free_flow_travel_time": 87,
-            "confidence": 0.96,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.8766667,
@@ -1241,7 +1241,7 @@
             "free_flow_travel_time": 485,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.7788889,
@@ -1252,7 +1252,7 @@
             "free_flow_travel_time": 483,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.4022222,
@@ -1263,7 +1263,7 @@
             "free_flow_travel_time": 489,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 52.8163889,
@@ -1274,7 +1274,7 @@
             "free_flow_travel_time": 470,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 56.2830556,
@@ -1285,7 +1285,7 @@
             "free_flow_travel_time": 445,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.06,
@@ -1296,7 +1296,7 @@
             "free_flow_travel_time": 492,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.2830556,
@@ -1307,7 +1307,7 @@
             "free_flow_travel_time": 1145,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1147222,
@@ -1318,7 +1318,7 @@
             "free_flow_travel_time": 587,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.6847222,
@@ -1329,18 +1329,18 @@
             "free_flow_travel_time": 666,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.5055555,
             "longitude": -116.0305555,
-            "current_speed": 24,
-            "free_flow_speed": 36,
-            "current_travel_time": 123,
-            "free_flow_travel_time": 82,
-            "confidence": 0.96,
+            "current_speed": 37,
+            "free_flow_speed": 37,
+            "current_travel_time": 80,
+            "free_flow_travel_time": 80,
+            "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.4583334,
@@ -1351,7 +1351,7 @@
             "free_flow_travel_time": 775,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.5997223,
@@ -1362,7 +1362,7 @@
             "free_flow_travel_time": 602,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.9330556,
@@ -1373,7 +1373,7 @@
             "free_flow_travel_time": 336,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.0330556,
@@ -1384,7 +1384,7 @@
             "free_flow_travel_time": 550,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.5011111,
@@ -1395,7 +1395,7 @@
             "free_flow_travel_time": 1182,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 53.5291666,
@@ -1406,7 +1406,7 @@
             "free_flow_travel_time": 472,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 54.5163889,
@@ -1417,7 +1417,7 @@
             "free_flow_travel_time": 350,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.6197222,
@@ -1428,7 +1428,7 @@
             "free_flow_travel_time": 554,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 55.7830556,
@@ -1439,7 +1439,7 @@
             "free_flow_travel_time": 511,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 50.3358334,
@@ -1450,7 +1450,7 @@
             "free_flow_travel_time": 143,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1905556,
@@ -1461,7 +1461,7 @@
             "free_flow_travel_time": 395,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.5833334,
@@ -1472,7 +1472,7 @@
             "free_flow_travel_time": 703,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1794524,
@@ -1483,7 +1483,7 @@
             "free_flow_travel_time": 617,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         },
         {
             "latitude": 49.1997222,
@@ -1494,7 +1494,7 @@
             "free_flow_travel_time": 19,
             "confidence": 1,
             "road_closure": false,
-            "date": "Wed, 02 Apr 2025 20:01:46 GMT"
+            "date": "2025-04-07T05:51:00+00:00"
         }
     ]
 }
