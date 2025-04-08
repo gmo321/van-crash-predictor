@@ -7,6 +7,14 @@ data/raw/TAS_no_CF.csv
 data/raw/TAS_entity.csv  
 data/raw/ICBC_BC_full.csv
 
+data/
+
 spark_jars/
 
 *.pyc
+
+notebooks/repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar
+
+__pycache__/
+
+.vscode/

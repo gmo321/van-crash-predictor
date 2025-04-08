@@ -40,6 +40,7 @@ services:
       - '8888:8888'
     volumes:
       - './notebooks:/home/jovyan/work'
+      - './spark_jars:/home/jovyan/spark_jars'
     environment:
       - 'JUPYTER_TOKEN=${JUPYTER_TOKEN}'
   weather-producer:
@@ -62,11 +63,22 @@ services:
     environment:
       - 'KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}'
       - 'TRAFFIC_API_KEY=${TRAFFIC_API_KEY}'
+      - 'KAFKA_MESSAGE_MAX_BYTES=200000000'
+      - 'KAFKA_REPLICA_FETCH_MAX_BYTES=200000000'
     volumes:
       - './traffic-producer:/app'
     ports:
       - '5002:5000'
+  redis:
+    image: 'redis:latest'
+    container_name: redis-server
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis-data:/data'
 volumes:
   zookeeper-data: 
   zookeeper-logs: 
   kafka-data:
+  redis-data:
