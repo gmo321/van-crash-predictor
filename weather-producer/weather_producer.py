@@ -48,7 +48,7 @@ def create_producer():
     return Producer(config)
         
     
-def poll_and_send_data(producer, interval=3600):
+def poll_and_send_data(producer, interval=30):
     while True:
         try:
             data = fetch_api_data()
@@ -70,7 +70,7 @@ def main():
     logging.info("Starting data polling process.")
     try:
         producer = create_producer()
-        poll_and_send_data(producer, interval=3600)  
+        poll_and_send_data(producer, interval=30)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:

@@ -5,6 +5,7 @@ import json
 import pandas as pd
 from dotenv import load_dotenv
 import time
+from datetime import datetime, timezone
 
 load_dotenv()
 
@@ -71,13 +72,14 @@ def fetch_api_data():
             clouds = response_json.get('clouds', {}).get('all', 'No cloud % available')
             rain = response_json.get('rain', {}).get('1h', 0)
             snow = response_json.get('snow', {}).get('1h', 0)
-            date = response_json.get('dt', {})
             name = response_json.get('name', {})
+            
+            rounded_utc = datetime.now(timezone.utc).replace(second=0, microsecond=0)
             
             results = {'name': name, 
                     'latitude': lat, 
                     'longitude': lon, 
-                    'date': date, 
+                    "date": rounded_utc.isoformat(),
                     'weather': weather_main, 
                     'weather_description': weather_description, 
                     'temp': temp,

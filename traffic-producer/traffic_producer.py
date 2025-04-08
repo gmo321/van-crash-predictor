@@ -6,6 +6,7 @@ import time
 from azure_maps import fetch_bulk_data
 from azure_maps import read_coordinates_from_csv
 
+
 logging.basicConfig(level=logging.DEBUG)
 
 # Kafka configuration
@@ -46,7 +47,7 @@ def create_producer():
     return Producer(config)
         
     
-def poll_and_send_data(producer, interval=3600):
+def poll_and_send_data(producer, interval=120):
 
     points = read_coordinates_from_csv()
     #points = ["49.2827,-123.1207"]
@@ -74,7 +75,7 @@ def main():
     logging.info("Starting data polling process.")
     try:
         producer = create_producer()
-        poll_and_send_data(producer, interval=3600)  
+        poll_and_send_data(producer, interval=120)  
     except KeyboardInterrupt:
         logging.info("Data polling interrupted.")
     except Exception as e:

@@ -7,12 +7,13 @@ import os
 import pandas as pd
 from dotenv import load_dotenv
 import time
+from datetime import datetime, timezone
 
 load_dotenv()
 
 logging.basicConfig(level=logging.WARNING)
 
-api_key = os.getenv("TRAFFIC_API_KEY")
+api_key = "Hvgg1pIRXNJxGAFKqjqTt1Gq84BLKn89"
 url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
 
 sample_point = "49.887,-119.495"
@@ -78,6 +79,8 @@ def fetch_traffic_data(point):
             segment_data = data.get("flowSegmentData", {})
             if not segment_data:
                 return None
+            
+            rounded_utc = datetime.now(timezone.utc).replace(second=0, microsecond=0)
 
             return {
                 "latitude": float(point.split(",")[0]),
@@ -88,7 +91,7 @@ def fetch_traffic_data(point):
                 "free_flow_travel_time": segment_data.get("freeFlowTravelTime", "N/A"),
                 "confidence": segment_data.get("confidence", "N/A"),
                 "road_closure": segment_data.get("roadClosure", "N/A"),
-                "date": response.headers.get("Date", "N/A")
+                "date": rounded_utc.isoformat()
             }
             
         except requests.exceptions.HTTPError as e:
