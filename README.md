@@ -152,6 +152,7 @@ After training, the model generates crash risk scores for location-time combinat
 
 ### Tableau Dashboard
 The dashboard features an interactive map displaying all accident locations from 2019 to 2023. In addition, various charts provide insights into the causes of accidents and other contributing factors, helping to analyze patterns and trends in road safety.
+![Tableau Dashboard](https://github.sfu.ca/gma89/van-crash-predictor/blob/staging/Tableau%20Dashboard.png)
 
 ### Others
 
@@ -178,7 +179,7 @@ In addition, the real-time streaming pipeline processes traffic and weather upda
 ---
 
 ### What to look for: 
-TO DO?
+TO DO? - or to remove if we dont want this part 
 - **Crash Hotspot Prediction Accuracy**: Check how well the model predicts known high-risk intersections in the city using historical data.
 - **Model Metrics**: Review precision and recall scores in `notebooks/model_evaluation.ipynb`.
 - **Streaming Pipeline**: Validate real-time data ingestion through Apache Kafka by monitoring console logs or using Kafka UI tools (e.g., Confluent Control Center if set up).
