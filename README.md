@@ -89,7 +89,7 @@ In the Data Engineering process, we focus on extracting, transforming, and loadi
 The key datasets used in this project are as follows:
 - **TAS Data** (Traffic Accident System Data): Contains details about where and how accidents happened in British Columbia (BC).
 - **ICBC Data** (Insurance Corporation of British Columbia): Contains historical accident data that includes attributes such as location, weather, time, and crash severity.
-- **Azure Maps Current Traffic Flow API**: Contains live traffic flow data of British Columbia roads and streets.
+- **TomTom Traffic Flow API**: Contains live traffic flow data of British Columbia roads and streets.
 - **Open Weather API**: Contains live weather reports of British Columbia, including temperature, visibility, and description.
 
 ### Transforming the Data
