@@ -64,7 +64,7 @@ This project analyzes historical car crash data in British Columbia to predict h
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Project Pipeline: 
-![BC Crash Prediction Pipeline](https://github.sfu.ca/gma89/van-crash-predictor/blob/main/pipeline.drawio.png)
+![BC Crash Prediction Pipeline](visualizations/pipeline.drawio.png)
 
 ### Built With
 
@@ -75,6 +75,37 @@ This project analyzes historical car crash data in British Columbia to predict h
 * ![Seaborn](https://img.shields.io/badge/Seaborn-0C4C8A?style=for-the-badge)
 * ![Folium](https://img.shields.io/badge/Folium-43B02A?style=for-the-badge)
 * ![Tableau](https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Setup & Run Locally
+
+### 1. Clone the Repository
+```
+git clone git@github.sfu.ca:gma89/van-crash-predictor.git
+cd van-crash-predictor
+```
+
+### 2. Start the Application with Docker Compose
+Make sure you have Docker and Docker Compose installed.
+```
+docker-compose up --build
+```
+This will spin up the entire pipeline, including:
+- Kafka and Zookeeper (for streaming)
+- Redis (for storing predictions)
+- Spark Structured Streaming job (for real-time inference)
+- Optional producers for weather/traffic data
+
+The system will begin ingesting data and making real-time crash hotspot predictions.
+
+### 3. Explore or Retrain the ML Model
+If you want to explore or retrain the model manually:
+```
+jupyter notebook model/ml_model.ipynb
+```
+
+This notebook includes feature engineering, training, and evaluation steps.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,7 +120,7 @@ In the Data Engineering process, we focus on extracting, transforming, and loadi
 The key datasets used in this project are as follows:
 - **TAS Data** (Traffic Accident System Data): Contains details about where and how accidents happened in British Columbia (BC).
 - **ICBC Data** (Insurance Corporation of British Columbia): Contains historical accident data that includes attributes such as location, weather, time, and crash severity.
-- **Azure Maps Current Traffic Flow API**: Contains live traffic flow data of British Columbia roads and streets.
+- **TomTom Traffic Flow API**: Contains live traffic flow data of British Columbia roads and streets.
 - **Open Weather API**: Contains live weather reports of British Columbia, including temperature, visibility, and description.
 
 ### Transforming the Data
@@ -169,7 +200,7 @@ The crash prediction model aims to enhance road safety in British Columbia by pr
 
 ## Results
 The model successfully identifies historical high-risk locations with good accuracy. Evaluation metrics show:
-- **Accuracy:** ~86% on validation data
+- **Accuracy:** 86% on validation data
 - **Precision/Recall:** Balanced performance across risk categories
 - **Feature Importance:** Weather, speed, time of day, and traffic flow are strong predictors
 In addition, the real-time streaming pipeline processes traffic and weather updates in near real-time (~1s latency), and the Redis cache enables fast risk score retrieval for visualization and alerting.
@@ -179,6 +210,6 @@ In addition, the real-time streaming pipeline processes traffic and weather upda
 
 ### What to look for: 
 - **Crash Hotspot Prediction Accuracy**: Check how well the model predicts known high-risk intersections in the city using historical data.
-- **Model Metrics**: Review precision and recall scores in `notebooks/model_evaluation.ipynb`.
+- **Model Metrics**: Review precision and recall scores in `notebooks/ml_model.ipynb`.
 - **Streaming Pipeline**: Validate real-time data ingestion through Apache Kafka by monitoring console logs or using Kafka UI tools (e.g., Confluent Control Center if set up).
 - **Visualizations**: Explore the interactive Tableau dashboard, which displays an accident heatmap and crash trends using time and weather filters.
