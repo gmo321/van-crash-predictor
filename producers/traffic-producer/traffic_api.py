@@ -13,7 +13,7 @@ load_dotenv()
 
 logging.basicConfig(level=logging.WARNING)
 
-api_key = os.getenv("WEATHER_API_KEY")
+api_key = os.getenv("TRAFFIC_API_KEY")
 url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
 
 #sample_point = "49.887,-119.495"

@@ -89,20 +89,6 @@ def main(spark):
     # Create 'city' column
     icbc_df = icbc_df.withColumn('city', concat_ws(', ', icbc_df['street'], icbc_df['municipality']))
 
-    
-    # Combine Street Name and municipality
-    #df = icbc_df.select(concat_ws(',', icbc_df['Street Full Name (ifnull)'], icbc_df['Municipality Name'])
-    #                    .alias('city'), 'Latitude', 'Longitude')
-    
-    # Get distinct cities where lat/lon is missing
-    #lon_lat_null_df = df.filter(df['Latitude'].isNull() | df['Longitude'].isNull()).select('city').distinct()
-    
-    #lon_lat_null_df.show(truncate=False)
-    
-    #total_rows = lon_lat_null_df.count()
-    #print(f'Total rows lon, lat null: {total_rows}')
-    #54340 NULL
-    
 
     #icbc_df.write.parquet("data/parquet/icbc", compression='LZ4', mode='overwrite')
     
