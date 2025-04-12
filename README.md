@@ -78,6 +78,37 @@ This project analyzes historical car crash data in British Columbia to predict h
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Setup & Run Locally
+
+### 1. Clone the Repository
+```
+git clone git@github.sfu.ca:gma89/van-crash-predictor.git
+cd van-crash-predictor
+```
+
+### 2. Start the Application with Docker Compose
+Make sure you have Docker and Docker Compose installed.
+```
+docker-compose up --build
+```
+This will spin up the entire pipeline, including:
+- Kafka and Zookeeper (for streaming)
+- Redis (for storing predictions)
+- Spark Structured Streaming job (for real-time inference)
+- Optional producers for weather/traffic data
+
+The system will begin ingesting data and making real-time crash hotspot predictions.
+
+### 3. Explore or Retrain the ML Model
+If you want to explore or retrain the model manually:
+```
+jupyter notebook model/ml_model.ipynb
+```
+
+This notebook includes feature engineering, training, and evaluation steps.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 
 ## Data Engineering
