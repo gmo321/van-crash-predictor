@@ -3,7 +3,9 @@
 
 <!-- Title -->
 <h3 align="center">British Columbia Real-time Car Crash Prediction and Analysis</h3>
-<h4 align="center">🎉 SFU MPCS Innovation Prize Winner 2025! 🎉</h4>
+<h4 align="center">
+  🎉 <a href="https://github.com/gmo321/van-crash-predictor/blob/main/visualizations/sparkandbeyond_mpcs_project_poster-1.png">SFU MPCS Innovation Prize Winner 2025</a> 🎉
+</h4>
 
 <p align="center">
   In this project, we analyze car crash incidents in British Columbia, Canada, and predict real-time hotspots for car crashes.
