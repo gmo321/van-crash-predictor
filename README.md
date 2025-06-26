@@ -2,16 +2,17 @@
 <a id="readme-top"></a>
 
 <!-- Title -->
-<h3 align="center">British Columbia Car Crash Predictor</h3>
+<h3 align="center">British Columbia Real-time Car Crash Prediction and Analysis</h3>
+<h4 align="center">🎉 SFU MPCS Innovation Prize Winner 2025! 🎉</h4>
 
 <p align="center">
   In this project, we analyze car crash incidents in British Columbia, Canada, and predict real-time hotspots for car crashes.
   <br />
-  <a href="https://github.sfu.ca/gma89/van-crash-predictor"><strong>Explore the code »</strong></a>
+  <a href="https://github.com/gmo321/van-crash-predictor"><strong>Explore the code »</strong></a>
   <br />
   <br />
   Contributors: 
-  <a href="https://github.sfu.ca/gma89">Gloria Mo</a> · 
+  <a href="https://github.com/gmo321">Gloria Mo</a> · 
   <a href="https://github.sfu.ca/rla187">Rojin Lohrasbinejad</a> · 
   <a href="https://github.sfu.ca/sha392">Swaifa Haque</a>
 </p>
@@ -82,7 +83,7 @@ This project analyzes historical car crash data in British Columbia to predict h
 
 ### 1. Clone the Repository
 ```
-git clone git@github.sfu.ca:gma89/van-crash-predictor.git
+git clone https://github.com/gmo321/van-crash-predictor.git
 cd van-crash-predictor
 ```
 
@@ -182,12 +183,14 @@ After training, the model generates crash risk scores for location-time combinat
 
 ### Tableau Dashboard
 The dashboard features an interactive map displaying all accident locations from 2019 to 2023. In addition, various charts provide insights into the causes of accidents and other contributing factors, helping to analyze patterns and trends in road safety.
-![Tableau Dashboard](https://github.sfu.ca/gma89/van-crash-predictor/blob/staging/Tableau%20Dashboard.png)
+![Tableau Dashboard](https://github.com/gmo321/van-crash-predictor/blob/main/tableau/Tableau%20Dashboard.png)
+
 
 ### Others
 
 We have a interactive hotspot heatmap as an HTML file. 
-![HTML Hotspot Heatmap](https://github.sfu.ca/gma89/van-crash-predictor/blob/staging/HTML.png)
+![HTML Hotspot Heatmap](https://github.com/gmo321/van-crash-predictor/blob/main/visualizations/heatmap_HTML.png)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
