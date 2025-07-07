@@ -21,3 +21,4 @@ __pycache__/
 .vscode/spark_jars/
 spark_jars/
 spark_jars/*.jar
+.ipynb_checkpoints/
